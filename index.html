@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BreathQuest – Respiratory System Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2b7de9;--navy:#17407a;--sky:#e6f4ff;--pink:#ff7aa8;--green:#24a865;--red:#e5484d;--yellow:#ffc93c;--ink:#1d2b45;--muted:#5d6b85;--card:#fff;--line:#d6e6f7}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Fredoka','Trebuchet MS',system-ui,sans-serif;color:var(--ink);background:linear-gradient(180deg,#d7eeff 0%,#f3faff 60%,#fff 100%);min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border-bottom:2px solid var(--line)}
+.logo{font-weight:700;font-size:1.35rem;color:var(--navy);display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo span{color:var(--pink)}
+.hbtn{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:.95rem;color:var(--navy);font-weight:600}
+.hbtn:hover{border-color:var(--blue)}
+.lang b{padding:2px 6px;border-radius:999px;color:var(--muted)}
+.lang b.on{background:var(--blue);color:#fff}
+.total{font-weight:600;color:var(--navy);white-space:nowrap}
+main{max-width:1000px;margin:0 auto;padding:18px 14px 60px}
+.panel{background:var(--card);border-radius:22px;padding:20px;box-shadow:0 6px 0 #cfe3f7,0 10px 30px rgba(43,125,233,.08);margin-bottom:16px}
+.center{text-align:center}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:14px;padding:11px 20px;font-size:1.05rem;font-weight:600;box-shadow:0 4px 0 #1b5fb8;transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1b5fb8}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:0 4px 0 #cfe3f7}
+.btn.pink{background:var(--pink);box-shadow:0 4px 0 #d9567f}
+.btn.green{background:var(--green);box-shadow:0 4px 0 #17804b}
+.btn.big{font-size:1.2rem;padding:14px 28px}
+.btn.sm{font-size:.9rem;padding:7px 12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.row.end{justify-content:flex-end}
+.guide{display:flex;align-items:flex-end;gap:10px;margin:4px 0 14px}
+.guide svg{flex:0 0 auto;animation:bob 3s ease-in-out infinite}
+.speech{position:relative;background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px 16px;font-size:1.05rem;line-height:1.45;flex:1}
+.speech:before{content:"";position:absolute;left:-10px;bottom:18px;border:9px solid transparent;border-right-color:var(--line);border-left:0}
+.speech:after{content:"";position:absolute;left:-7px;bottom:19px;border:8px solid transparent;border-right-color:#fff;border-left:0}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hero{background:linear-gradient(135deg,#fff,#eaf6ff);border-radius:26px;padding:18px;margin-bottom:18px;border:2px solid var(--line)}
+.hero h1{margin:0 0 6px;color:var(--navy);font-size:clamp(1.6rem,4vw,2.3rem)}
+.hero p.sub{margin:0 0 6px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.lvl{text-align:left;background:#fff;border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 5px 0 #cfe3f7;transition:transform .15s,border-color .15s;color:var(--ink)}
+.lvl:hover{transform:translateY(-3px);border-color:var(--blue)}
+.lvl-top{display:flex;align-items:center;gap:10px}
+.lvl-icon{font-size:2rem;width:52px;height:52px;border-radius:16px;background:var(--sky);display:grid;place-items:center}
+.lvl-num{font-size:.85rem;color:var(--muted);font-weight:600}
+.lvl h3{margin:2px 0 0;font-size:1.2rem;color:var(--navy)}
+.lvl p{margin:8px 0;color:var(--muted);font-size:.95rem;line-height:1.35}
+.stars{font-size:1.2rem;letter-spacing:2px}
+.stars .off,.bigstars .off{filter:grayscale(1);opacity:.3}
+.bigstars{font-size:2.6rem;letter-spacing:6px;margin:8px 0}
+.hint{color:var(--muted);text-align:center}
+.foot{text-align:center;margin-top:22px;color:var(--muted);font-size:.85rem}
+.foot button{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:.85rem}
+.lhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lhead h2{margin:0;color:var(--navy);flex:1;font-size:1.45rem}
+.pill{background:#fff;border:2px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:600;color:var(--navy);font-size:.95rem}
+.bar{height:10px;background:#e8f1fb;border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--pink));border-radius:99px;transition:width .4s}
+/* anatomy */
+.two{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.svgbox{background:#fff;border-radius:22px;padding:8px;box-shadow:0 6px 0 #cfe3f7}
+.svgbox svg{width:100%;height:auto;display:block;max-height:72vh}
+.part{cursor:pointer;transition:filter .2s}
+.part:hover{filter:drop-shadow(0 0 5px #2b7de9)}
+.part.found{filter:drop-shadow(0 0 5px #24a865) drop-shadow(0 0 3px #24a865)}
+.part.wrong{filter:drop-shadow(0 0 6px #e5484d) drop-shadow(0 0 4px #e5484d)}
+.part.hint{animation:glow 1s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 2px #ffc93c)}50%{filter:drop-shadow(0 0 9px #ffb400) drop-shadow(0 0 5px #ffb400)}}
+.info{border-radius:16px;padding:12px 14px;margin:10px 0;border:2px solid}
+.info h4{margin:0 0 4px;font-size:1.1rem}
+.info p{margin:0;line-height:1.4}
+.info.good,.fb.good{background:#eafaf1;border-color:#9fe0bd}
+.info.bad,.fb.bad{background:#fff0f1;border-color:#ffc0c4}
+.chips{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:10px}
+.chip{background:#f1f6fc;border:2px dashed #c5d9ef;border-radius:10px;padding:4px 8px;font-size:.85rem;color:var(--muted)}
+.chip.on{background:#eafaf1;border:2px solid #9fe0bd;color:#17804b;font-weight:600}
+.arr{color:#9bb3cf}
+/* quiz */
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;color:var(--muted);flex-wrap:wrap}
+.timer{background:var(--sky);padding:3px 12px;border-radius:99px;color:var(--navy)}
+.timer.low{background:#ffe1e3;color:var(--red);animation:pulse .6s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.q{font-size:1.3rem;line-height:1.4;margin:6px 0 14px;color:var(--navy)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.opts{grid-template-columns:1fr}}
+.opt{text-align:left;background:#f6faff;border:2px solid var(--line);border-radius:14px;padding:12px 14px;font-size:1.02rem;color:var(--ink);line-height:1.35;transition:transform .1s,border-color .15s}
+.opt:hover:not(:disabled){border-color:var(--blue);transform:translateY(-2px)}
+.opt.right{background:#dff7ea;border-color:var(--green);font-weight:600}
+.opt.wrong{background:#ffe3e5;border-color:var(--red)}
+.opt.dim{opacity:.55}
+.fb{border:2px solid;border-radius:14px;padding:12px 14px;margin-top:14px;line-height:1.45}
+/* sorter */
+.cardzone{display:flex;justify-content:center;margin:6px 0 16px;min-height:110px}
+.scard{background:#fff;border:3px solid var(--blue);border-radius:18px;padding:18px 22px;font-size:1.25rem;font-weight:600;text-align:center;max-width:520px;box-shadow:0 6px 0 #cfe3f7;display:flex;align-items:center;justify-content:center;color:var(--navy)}
+.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.sorter{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bin{border:3px solid;border-radius:20px;padding:16px 10px;font-size:1.1rem;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .1s;color:var(--ink)}
+.bin:active{transform:scale(.96)}
+.bin .bicon{font-size:2rem}
+.bin small{background:#fff;border-radius:99px;padding:1px 10px;font-weight:700}
+.bin.in{background:#e6f4ff;border-color:#7fbaf5}
+.bin.out{background:#fff0f5;border-color:#ffa9c6}
+.bin.good{background:#eafaf1;border-color:#86d9ac}
+.bin.bad{background:#fff0f1;border-color:#ffadb2}
+/* model */
+.model{width:100%;max-width:420px;display:block;margin:0 auto}
+#mLungs{transform-box:fill-box;transform-origin:50% 0;transition:transform 1.3s ease}
+.model.inhale #mLungs{transform:scale(1.1,1.13)}
+#mDia{transform-box:fill-box;transform-origin:50% 100%;transition:transform 1.3s ease}
+.model.inhale #mDia{transform:translateY(14px) scaleY(.4)}
+#ribsL,#ribsR{transform-box:fill-box;transition:transform 1.3s ease}
+#ribsL{transform-origin:100% 0}#ribsR{transform-origin:0 0}
+.model.inhale #ribsL{transform:rotate(5deg) translateX(-5px)}
+.model.inhale #ribsR{transform:rotate(-5deg) translateX(5px)}
+#airIn,#airOut{transition:opacity .6s}
+.model #airIn{opacity:0}.model.inhale #airIn{opacity:1}
+.model #airOut{opacity:1}.model.inhale #airOut{opacity:0}
+.state h3{margin:0 0 6px;color:var(--navy)}
+.state ul{margin:0;padding-left:20px;line-height:1.6}
+.gauge{margin-top:12px;font-size:.92rem;color:var(--muted)}
+.gbar{position:relative;height:16px;border-radius:99px;background:#eef3f9;margin:4px 0;overflow:visible}
+.gbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#7fbaf5,#2b7de9);transition:width 1.3s}
+.gbar em{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--pink);border-radius:2px;left:50%}
+/* arcade */
+.hud{display:flex;gap:10px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+.hud span{background:#fff;border:2px solid var(--line);border-radius:99px;padding:6px 16px;font-size:1.15rem;font-weight:600;color:var(--navy)}
+.arena{position:relative;height:380px;border-radius:24px;overflow:hidden;box-shadow:0 6px 0 #cfe3f7;user-select:none;touch-action:manipulation;background:#fff}
+.zone{position:absolute;left:0;right:0}
+.zone.air{top:0;height:48%;background:radial-gradient(circle at 30% 30%,#f2f9ff,#cbe6ff)}
+.zone.blood{bottom:0;height:48%;background:linear-gradient(180deg,#ffd9de,#ffb3bd);overflow:hidden}
+.wallm{position:absolute;left:0;right:0;top:48%;height:4%;background:repeating-linear-gradient(90deg,#f4a3b4 0 22px,#e98aa0 22px 26px)}
+.zlabel{position:absolute;left:12px;top:8px;font-weight:600;color:var(--navy);opacity:.6;font-size:.95rem;z-index:1}
+.blood .zlabel{top:auto;bottom:8px;color:#8a1f33}
+.rbc{position:absolute;width:52px;height:30px;border-radius:50%;background:radial-gradient(ellipse at center,#c8283f 0 30%,#e5485f 31% 100%);animation:flow 9s linear infinite;opacity:.85}
+@keyframes flow{from{left:-15%}to{left:110%}}
+.mol{position:absolute;width:56px;height:56px;margin-left:-4px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:1.05rem;cursor:pointer;z-index:3;animation:bob2 1.6s ease-in-out infinite,pop .3s ease;transition:transform .7s ease,opacity .7s ease;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.mol.static{position:relative;display:inline-grid;animation:none;width:46px;height:46px;cursor:default;vertical-align:middle;margin-right:6px}
+.mol.o2{background:#2b7de9;color:#fff;border:3px solid #fff}
+.mol.co2{background:#6b7280;color:#fff;border:3px solid #fff}
+.mol.co{background:#1f2937;color:#ffcf4d;border:3px dashed #ffcf4d}
+.mol.down{transform:translateY(165px) scale(.5);opacity:0}
+.mol.up{transform:translateY(-165px) scale(.7);opacity:0}
+.mol.bad{transform:scale(1.6);opacity:0}
+.mol.fade{opacity:0;transform:scale(.4)}
+@keyframes bob2{0%,100%{margin-top:0}50%{margin-top:-7px}}
+.floatpt{position:absolute;z-index:5;font-weight:700;font-size:1.2rem;color:var(--green);pointer-events:none;animation:rise .8s ease forwards}
+.floatpt.neg{color:var(--red)}
+@keyframes rise{to{transform:translateY(-40px);opacity:0}}
+.toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);background:#1f2937;color:#ffcf4d;padding:8px 14px;border-radius:12px;font-weight:600;z-index:6;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;max-width:90%}
+.toast.on{opacity:1}
+.arena.flash{animation:flash .4s}
+@keyframes flash{50%{box-shadow:0 0 0 6px var(--red)}}
+.tip{text-align:center;color:var(--muted);margin-top:10px}
+.legend{display:grid;gap:10px;margin:8px 0 4px;font-size:1.02rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.stat{background:var(--sky);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--navy)}
+.explain{background:#fffbea;border:2px solid #ffe08a;border-radius:16px;padding:12px 14px;line-height:1.5}
+/* equation */
+.eq{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;font-size:1.5rem;font-weight:700;color:var(--navy);margin:10px 0}
+.slot{min-width:96px;min-height:70px;border:3px dashed #a9c7e8;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 8px;background:#f6faff;color:#a9c7e8;font-size:1.4rem}
+.slot.cur{border-color:var(--pink);background:#fff3f7;animation:pulse 1.2s infinite;color:var(--pink)}
+.slot.filled{border-style:solid;border-color:var(--green);background:#eafaf1;color:var(--navy)}
+.slot b,.token b{font-size:1.15rem}
+.slot small,.token small{font-size:.78rem;font-weight:500;color:var(--muted)}
+.eqlab{display:flex;justify-content:center;gap:40px;color:var(--muted);font-weight:600;margin-bottom:12px;flex-wrap:wrap}
+.tokens{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.token{background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 14px;display:flex;flex-direction:column;align-items:center;color:var(--navy);box-shadow:0 4px 0 #cfe3f7;min-width:92px}
+.token:hover:not(:disabled){border-color:var(--blue)}
+.token:disabled{opacity:.3;cursor:default}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* disease */
+.patient{display:flex;gap:14px;align-items:flex-start;background:#f6faff;border-radius:18px;padding:14px;margin-bottom:12px}
+.pav{font-size:3rem;background:#fff;border-radius:50%;width:76px;height:76px;display:grid;place-items:center;flex:0 0 auto;border:3px solid var(--line)}
+.patient h3{margin:0 0 4px;color:var(--navy)}
+.patient p{margin:0;line-height:1.5;font-size:1.05rem}
+/* cert */
+.cert{background:#fff;border:8px double #7fbaf5;border-radius:24px;padding:28px 20px;text-align:center;max-width:640px;margin:0 auto}
+.cert h1{margin:6px 0;color:var(--navy);font-size:clamp(1.5rem,4vw,2.1rem)}
+.cert .cname{font-size:clamp(1.6rem,5vw,2.4rem);color:var(--pink);margin:6px 0;border-bottom:3px dotted #a9c7e8;display:inline-block;padding:0 20px 4px}
+input.name{font:inherit;font-size:1.2rem;padding:10px 14px;border-radius:12px;border:2px solid var(--line);width:100%;max-width:360px}
+.confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@media print{header,.row,.foot{display:none!important}body{background:#fff}.cert{border-color:#2b7de9}}
+@media(max-width:760px){.svgbox svg{max-height:50vh}}
+@media(max-width:440px){.total{display:none}}
+@media(max-width:520px){.lhead h2{font-size:1.2rem}.logo{font-size:1.1rem}.hbtn{padding:5px 9px;font-size:.85rem}.total{font-size:.85rem}.q{font-size:1.15rem}.scard{font-size:1.1rem}.arena{height:360px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" onclick="home()">🫁 Breath<span>Quest</span></div>
+  <span class="total" id="total"></span>
+  <button class="hbtn lang" id="langBtn" onclick="toggleLang()" aria-label="Language"><b data-l="en">EN</b><b data-l="id">ID</b></button>
+  <button class="hbtn" id="muteBtn" onclick="toggleMute()" aria-label="Sound">🔊</button>
+</header>
+<main id="app"></main>
+
+<script>
+/* =========================================================
+   BreathQuest – Respiratory System Adventure (EN / ID)
+   Single-file game. No external dependencies except a font.
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]} return a };
+const rand = a => a[Math.random()*a.length|0];
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let A = {};            // current screen actions (used by inline onclick)
+let screen = null;
+
+/* ---------- storage ---------- */
+const KEY='breathquest_v1';
+let save = {stars:{}, best:{}, name:'', lang:'en', muted:false};
+try{ Object.assign(save, JSON.parse(localStorage.getItem(KEY)||'{}')) }catch(e){}
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(save)) }catch(e){} }
+let lang = save.lang==='id'?'id':'en';
+let muted = !!save.muted;
+const tx = o => (o && typeof o==='object' && !Array.isArray(o)) ? (o[lang] ?? o.en) : o;
+
+/* ---------- UI text ---------- */
+const UI = {
+ welcomeTitle:{en:"Welcome to BreathQuest!",id:"Selamat datang di BreathQuest!"},
+ welcomeSub:{en:"An adventure through the respiratory system",id:"Petualangan menjelajahi sistem pernapasan"},
+ welcome:{en:"Woof! I’m <b>Bubble</b> 🐾 Take a deep breath… and let’s explore how your body breathes! Play the levels in order, collect ⭐ stars, and unlock your certificate.",id:"Guk! Aku <b>Bubble</b> 🐾 Tarik napas dalam-dalam… ayo jelajahi bagaimana tubuhmu bernapas! Mainkan level secara berurutan, kumpulkan ⭐ bintang, dan buka sertifikatmu."},
+ level:{en:"Level",id:"Level"},
+ getCert:{en:"Get your certificate",id:"Ambil sertifikatmu"},
+ certHint:{en:"Finish all 6 levels to unlock your certificate! 🎓",id:"Selesaikan ke-6 level untuk membuka sertifikatmu! 🎓"},
+ reset:{en:"Reset progress",id:"Atur ulang kemajuan"},
+ resetQ:{en:"Erase all stars and scores?",id:"Hapus semua bintang dan skor?"},
+ levelDone:{en:"Level complete!",id:"Level selesai!"},
+ points:{en:"Points",id:"Poin"},
+ pts:{en:"pts",id:"poin"},
+ funFact:{en:"Fun fact:",id:"Fakta menarik:"},
+ retry:{en:"Play again",id:"Main lagi"},
+ next:{en:"Next level",id:"Level berikutnya"},
+ menu:{en:"Menu",id:"Menu"},
+ nextQ:{en:"Next",id:"Lanjut"},
+ yay:{en:["Pawsome!","Great job!","Correct!","Brilliant!"],id:["Hebat!","Kerja bagus!","Benar!","Keren!"]},
+ nope:{en:"Not quite!",id:"Belum tepat!"},
+ timeUp:{en:"Time’s up!",id:"Waktu habis!"},
+ question:{en:"Question",id:"Soal"},
+ mistakes:{en:"Mistakes",id:"Kesalahan"},
+ start:{en:"Start",id:"Mulai"},
+ continue:{en:"Continue",id:"Lanjutkan"},
+ step:{en:"Step",id:"Langkah"},
+ clue:{en:"Clue",id:"Petunjuk"},
+ airFirst:{en:"You breathe in through your nose. Tap the part where the air goes <b>first</b>.",id:"Kamu menghirup udara lewat hidung. Ketuk bagian yang <b>pertama</b> dilewati udara."},
+ airNext:{en:"Where does the air go <b>next</b>?",id:"Ke mana udara mengalir <b>selanjutnya</b>?"},
+ phaseB:{en:"🎉 You traced the whole air path! <b>Part 2:</b> read each clue and tap the matching part.",id:"🎉 Kamu berhasil menelusuri jalur udara! <b>Bagian 2:</b> baca petunjuknya lalu ketuk bagian yang sesuai."},
+ allFound:{en:"You found them all! 🎉",id:"Kamu menemukan semuanya! 🎉"},
+ tapHint:{en:"Tip: after 2 wrong taps, the right part will glow.",id:"Tips: setelah 2 kali salah, bagian yang benar akan bersinar."},
+ youTapped:{en:"You tapped",id:"Kamu mengetuk"},
+ inhale:{en:"Inhale (inspiration)",id:"Inspirasi (menghirup)"},
+ exhale:{en:"Exhale (expiration)",id:"Ekspirasi (mengembuskan)"},
+ breatheIn:{en:"⬇ Breathe in",id:"⬇ Tarik napas"},
+ breatheOut:{en:"⬆ Breathe out",id:"⬆ Embuskan"},
+ auto:{en:"🔄 Auto-breathe",id:"🔄 Napas otomatis"},
+ stop:{en:"⏸ Stop",id:"⏸ Berhenti"},
+ modelIntro:{en:"This is a model of your chest. Press <b>Breathe in</b> and <b>Breathe out</b> and watch the diaphragm, ribs and lungs. Try both to continue!",id:"Ini model rongga dadamu. Tekan <b>Tarik napas</b> dan <b>Embuskan</b>, lalu perhatikan diafragma, tulang rusuk, dan paru-paru. Coba keduanya untuk lanjut!"},
+ toSort:{en:"Sorting game ➜",id:"Permainan memilah ➜"},
+ lungP:{en:"Air pressure inside the lungs",id:"Tekanan udara di dalam paru-paru"},
+ atmLine:{en:"Pink line = air pressure outside the body",id:"Garis merah muda = tekanan udara di luar tubuh"},
+ airInLbl:{en:"air IN",id:"udara MASUK"},
+ airOutLbl:{en:"air OUT",id:"udara KELUAR"},
+ sortMech:{en:"Does this happen when you <b>inhale</b> or <b>exhale</b>? Tap the right box!",id:"Apakah ini terjadi saat <b>inspirasi</b> atau <b>ekspirasi</b>? Ketuk kotak yang benar!"},
+ belongs:{en:"It belongs in",id:"Jawaban yang benar:"},
+ gxIntro:{en:"You are inside an <b>alveolus</b>! Above is the air in the alveolus, below is a blood capillary. Help the gases <b>diffuse</b> across the thin wall. You have <b>40 seconds</b> — tap fast for combos! 🔥",id:"Kamu berada di dalam <b>alveolus</b>! Bagian atas adalah udara di alveolus, bagian bawah adalah kapiler darah. Bantu gas <b>berdifusi</b> melewati dinding tipis. Waktumu <b>40 detik</b> — ketuk cepat untuk kombo! 🔥"},
+ lgO2:{en:"<b>Oxygen</b> in the alveolus → tap to send it into the blood (+10)",id:"<b>Oksigen</b> di alveolus → ketuk untuk mengirimnya ke darah (+10)"},
+ lgCO2:{en:"<b>Carbon dioxide</b> in the blood → tap to send it into the alveolus to be breathed out (+10)",id:"<b>Karbon dioksida</b> di darah → ketuk untuk mengirimnya ke alveolus agar diembuskan (+10)"},
+ lgCO:{en:"<b>Carbon monoxide</b> from smoke — DON’T tap it! (−15)",id:"<b>Karbon monoksida</b> dari asap — JANGAN diketuk! (−15)"},
+ zAir:{en:"🫧 Alveolus (air)",id:"🫧 Alveolus (udara)"},
+ zBlood:{en:"🩸 Capillary (blood)",id:"🩸 Kapiler (darah)"},
+ gxTip:{en:"Tap <b>O₂</b> at the top • Tap <b>CO₂</b> at the bottom • Avoid <b>CO</b>!",id:"Ketuk <b>O₂</b> di atas • Ketuk <b>CO₂</b> di bawah • Hindari <b>CO</b>!"},
+ coWarn:{en:"⚠️ CO grabs haemoglobin and blocks oxygen!",id:"⚠️ CO mengikat hemoglobin dan menghalangi oksigen!"},
+ gxDone:{en:"Time’s up! Look how much gas you exchanged!",id:"Waktu habis! Lihat berapa banyak gas yang kamu tukar!"},
+ stO2:{en:"O₂ into blood",id:"O₂ ke darah"},
+ stCO2:{en:"CO₂ breathed out",id:"CO₂ diembuskan"},
+ stCO:{en:"CO touched",id:"CO tersentuh"},
+ stCombo:{en:"Best combo",id:"Kombo terbaik"},
+ gxExplain:{en:"<b>What just happened?</b> Gases move by <b>diffusion</b> — from where there is a lot of them to where there is less. O₂ is high in the alveoli and low in the blood, so it diffuses into the blood and joins <b>haemoglobin</b> in red blood cells (forming <b>oxyhaemoglobin</b>). CO₂ is high in the blood, so it diffuses into the alveoli and is breathed out. <b>Carbon monoxide</b> (from cigarette smoke, car exhaust or a generator in a closed room) binds to haemoglobin about 200 times more strongly than O₂ — that’s why it is so dangerous.",id:"<b>Apa yang terjadi?</b> Gas berpindah secara <b>difusi</b> — dari tempat berkonsentrasi tinggi ke tempat berkonsentrasi rendah. Kadar O₂ tinggi di alveolus dan rendah di darah, sehingga O₂ berdifusi ke darah dan berikatan dengan <b>hemoglobin</b> di sel darah merah (membentuk <b>oksihemoglobin</b>). Kadar CO₂ tinggi di darah, sehingga CO₂ berdifusi ke alveolus lalu diembuskan. <b>Karbon monoksida</b> (dari asap rokok, knalpot, atau genset di ruang tertutup) mengikat hemoglobin sekitar 200 kali lebih kuat daripada O₂ — itulah sebabnya CO sangat berbahaya."},
+ eqIntro:{en:"Your cells “burn” food to get energy — this is <b>cellular respiration</b>. Build the equation! Tap the molecules to fill the glowing box.",id:"Sel-selmu “membakar” makanan untuk mendapat energi — inilah <b>respirasi sel</b>. Susun persamaannya! Ketuk molekul untuk mengisi kotak yang bersinar."},
+ reactants:{en:"⬅ Reactants (used up)",id:"⬅ Pereaksi (dipakai)"},
+ products:{en:"Products (made) ➡",id:"Hasil (dibentuk) ➡"},
+ isProduct:{en:"That one is a <b>product</b> — it is made by the reaction, not used up. Fill the reactants first.",id:"Itu adalah <b>hasil</b> — dibentuk oleh reaksi, bukan dipakai. Isi pereaksinya dulu."},
+ isReactant:{en:"That one is a <b>reactant</b> and it’s already used. Now choose what the reaction <b>makes</b>.",id:"Itu adalah <b>pereaksi</b> dan sudah dipakai. Sekarang pilih apa yang <b>dihasilkan</b> reaksi."},
+ eqDone:{en:"🎉 Perfect! <b>Aerobic respiration</b> happens in the <b>mitochondria</b>. The O₂ comes from your lungs, and the CO₂ travels back to your lungs to be breathed out. Breathing and cellular respiration are a team!",id:"🎉 Sempurna! <b>Respirasi aerob</b> terjadi di <b>mitokondria</b>. O₂ berasal dari paru-parumu, dan CO₂ dibawa kembali ke paru-paru untuk diembuskan. Bernapas dan respirasi sel adalah satu tim!"},
+ toQuiz:{en:"Quiz time ➜",id:"Saatnya kuis ➜"},
+ patient:{en:"Patient",id:"Pasien"},
+ diagnose:{en:"What is your diagnosis, Detective?",id:"Apa diagnosismu, Detektif?"},
+ detIntro:{en:"Dr. Bubble needs your help! Read each patient’s symptoms and choose the disease. 🔍",id:"Dokter Bubble butuh bantuanmu! Baca gejala setiap pasien lalu pilih penyakitnya. 🔍"},
+ healthIntro:{en:"Last part! Does each habit <b>help</b> or <b>harm</b> your lungs?",id:"Bagian terakhir! Apakah kebiasaan ini <b>baik</b> atau <b>buruk</b> bagi paru-parumu?"},
+ helps:{en:"Helps my lungs",id:"Baik untuk paru"},
+ harms:{en:"Harms my lungs",id:"Buruk untuk paru"},
+ finalIntro:{en:"The Final Challenge! <b>12 questions</b> from all topics, <b>20 seconds</b> each and <b>3 hearts</b> ❤️❤️❤️. Answer fast for bonus points. Ready?",id:"Tantangan Akhir! <b>12 soal</b> dari semua topik, <b>20 detik</b> per soal dan <b>3 nyawa</b> ❤️❤️❤️. Jawab cepat untuk poin bonus. Siap?"},
+ certTitle:{en:"Certificate of Achievement",id:"Sertifikat Penghargaan"},
+ certGiven:{en:"This certificate is proudly given to",id:"Sertifikat ini dengan bangga diberikan kepada"},
+ certFor:{en:"for completing <b>BreathQuest</b> — exploring the anatomy, physiology, metabolism and diseases of the respiratory system.",id:"atas keberhasilan menyelesaikan <b>BreathQuest</b> — menjelajahi anatomi, fisiologi, metabolisme, dan penyakit sistem pernapasan."},
+ enterName:{en:"Type your name for the certificate:",id:"Ketik namamu untuk sertifikat:"},
+ make:{en:"Create certificate",id:"Buat sertifikat"},
+ print:{en:"🖨 Print / Save PDF",id:"🖨 Cetak / Simpan PDF"},
+ changeName:{en:"✏️ Change name",id:"✏️ Ganti nama"},
+ signed:{en:"Signed, Bubble the Maltese 🐾",id:"Tertanda, Bubble si Maltese 🐾"},
+ gameOver:{en:"Out of hearts!",id:"Nyawa habis!"},
+};
+const t = k => tx(UI[k]);
+const starMsg = {
+ 3:{en:"Amazing! Your lungs must be proud! 🌟",id:"Luar biasa! Paru-parumu pasti bangga! 🌟"},
+ 2:{en:"Nice work! Can you get 3 stars next time?",id:"Bagus! Bisakah kamu dapat 3 bintang lain kali?"},
+ 1:{en:"Good effort! Practice makes perfect — try again!",id:"Usaha yang bagus! Latihan membuat sempurna — coba lagi!"}
+};
+
+/* ---------- Levels ---------- */
+const LEVELS = [
+ {id:'anatomy',icon:'👃',name:{en:'The Air Path',id:'Jalur Udara'},desc:{en:'Anatomy — follow the air from your nose to the alveoli and find every part.',id:'Anatomi — ikuti udara dari hidung sampai alveolus dan temukan setiap organ.'},
+  fact:{en:"If all your alveoli were spread out flat, they would cover about 70 m² — almost the size of a badminton court!",id:"Jika semua alveolusmu dibentangkan, luasnya sekitar 70 m² — hampir seluas lapangan bulu tangkis!"}},
+ {id:'mechanics',icon:'🫁',name:{en:'The Breathing Machine',id:'Mesin Pernapasan'},desc:{en:'Physiology — how the diaphragm and ribs make you inhale and exhale.',id:'Fisiologi — cara diafragma dan tulang rusuk membuatmu menghirup dan mengembuskan napas.'},
+  fact:{en:"You take around 20,000 breaths every day — without even thinking about it!",id:"Kamu bernapas sekitar 20.000 kali setiap hari — tanpa perlu memikirkannya!"}},
+ {id:'exchange',icon:'🫧',name:{en:'Gas Exchange Rush',id:'Kejar Pertukaran Gas'},desc:{en:'Arcade — swap O₂ and CO₂ between the alveolus and the blood.',id:'Arkade — tukarkan O₂ dan CO₂ antara alveolus dan darah.'},
+  fact:{en:"A red blood cell passes through a lung capillary in less than one second — and that’s enough time to load up with oxygen!",id:"Sel darah merah melewati kapiler paru-paru dalam waktu kurang dari satu detik — dan itu cukup untuk mengangkut oksigen!"}},
+ {id:'metabolism',icon:'⚡',name:{en:'The Energy Lab',id:'Lab Energi'},desc:{en:'Metabolism — cellular respiration, aerobic vs anaerobic, fermentation.',id:'Metabolisme — respirasi sel, aerob vs anaerob, fermentasi.'},
+  fact:{en:"Your brain is only about 2% of your body weight, but it uses about 20% of the oxygen you breathe!",id:"Otakmu hanya sekitar 2% dari berat badan, tetapi memakai sekitar 20% oksigen yang kamu hirup!"}},
+ {id:'disease',icon:'🩺',name:{en:'Lung Detective',id:'Detektif Paru'},desc:{en:'Diseases — diagnose patients and learn how to keep lungs healthy.',id:'Penyakit — diagnosis pasien dan pelajari cara menjaga paru-paru tetap sehat.'},
+  fact:{en:"Quitting smoking helps quickly: within a few months the cilia in the airways start working again and coughing decreases.",id:"Berhenti merokok cepat terasa manfaatnya: dalam beberapa bulan silia di saluran napas mulai bekerja lagi dan batuk berkurang."}},
+ {id:'final',icon:'🏆',name:{en:'Final Challenge',id:'Tantangan Akhir'},desc:{en:'Mixed rapid-fire quiz against the clock. Can you beat it?',id:'Kuis cepat campuran melawan waktu. Bisakah kamu menaklukkannya?'},
+  fact:{en:"Hiccups are sudden spasms of the diaphragm — the ‘hic’ sound is your vocal cords snapping shut!",id:"Cegukan adalah kejang mendadak pada diafragma — bunyi ‘hik’ berasal dari pita suara yang menutup tiba-tiba!"}},
+];
+
+/* ---------- Content data ---------- */
+const PARTS={
+ nose:{n:{en:'Nasal cavity',id:'Rongga hidung'},f:{en:'Nose hairs and sticky mucus trap dust and germs, and the air is warmed and moistened.',id:'Rambut hidung dan lendir menangkap debu serta kuman, lalu udara dihangatkan dan dilembapkan.'}},
+ pharynx:{n:{en:'Pharynx (throat)',id:'Faring (tekak)'},f:{en:'A passage shared by air and food, behind the nose and mouth.',id:'Saluran yang dilalui udara dan makanan, di belakang hidung dan mulut.'}},
+ epiglottis:{n:{en:'Epiglottis',id:'Epiglotis'},f:{en:'A flap that closes over the larynx when you swallow, so food goes to the oesophagus.',id:'Katup yang menutup laring saat menelan sehingga makanan masuk ke kerongkongan.'}},
+ larynx:{n:{en:'Larynx (voice box)',id:'Laring (pangkal tenggorok)'},f:{en:'Contains the vocal cords, which vibrate to make your voice.',id:'Berisi pita suara yang bergetar untuk menghasilkan suara.'}},
+ trachea:{n:{en:'Trachea (windpipe)',id:'Trakea (batang tenggorok)'},f:{en:'C-shaped cartilage rings keep it open; cilia sweep mucus and dust up and out.',id:'Cincin tulang rawan berbentuk C menjaganya tetap terbuka; silia menyapu lendir dan debu ke atas.'}},
+ bronchi:{n:{en:'Bronchi',id:'Bronkus'},f:{en:'The trachea splits into two bronchi — one to each lung.',id:'Trakea bercabang menjadi dua bronkus — satu ke setiap paru-paru.'}},
+ bronchioles:{n:{en:'Bronchioles',id:'Bronkiolus'},f:{en:'Thousands of tiny branching tubes with no cartilage rings.',id:'Ribuan saluran kecil bercabang tanpa cincin tulang rawan.'}},
+ alveoli:{n:{en:'Alveoli',id:'Alveolus'},f:{en:'Hundreds of millions of tiny air sacs wrapped in capillaries — this is where O₂ and CO₂ are exchanged.',id:'Ratusan juta kantong udara kecil yang diselubungi kapiler — di sinilah O₂ dan CO₂ dipertukarkan.'}},
+ lungs:{n:{en:'Lungs',id:'Paru-paru'},f:{en:'Spongy organs. The right lung has 3 lobes; the left has 2, leaving room for the heart.',id:'Organ seperti spons. Paru-paru kanan memiliki 3 lobus; kiri 2 lobus, memberi ruang untuk jantung.'}},
+ pleura:{n:{en:'Pleura',id:'Pleura'},f:{en:'A double membrane around each lung; the fluid between the layers lets the lungs glide without friction.',id:'Selaput ganda pembungkus paru-paru; cairan di antara lapisannya membuat paru-paru bergerak tanpa gesekan.'}},
+ diaphragm:{n:{en:'Diaphragm',id:'Diafragma'},f:{en:'A dome-shaped sheet of muscle under the lungs. It contracts and flattens when you breathe in.',id:'Lembaran otot berbentuk kubah di bawah paru-paru. Diafragma berkontraksi dan mendatar saat kamu menghirup napas.'}},
+};
+const PATH=['nose','pharynx','larynx','trachea','bronchi','bronchioles','alveoli'];
+const FINDS=[
+ {id:'epiglottis',c:{en:'Which flap stops food from going down the windpipe?',id:'Katup mana yang mencegah makanan masuk ke batang tenggorok?'}},
+ {id:'diaphragm',c:{en:'Which dome-shaped muscle contracts to make you breathe in?',id:'Otot berbentuk kubah mana yang berkontraksi agar kamu menghirup udara?'}},
+ {id:'pleura',c:{en:'Which double membrane wraps around the lungs?',id:'Selaput ganda mana yang membungkus paru-paru?'}},
+ {id:'larynx',c:{en:'Where are your vocal cords?',id:'Di mana letak pita suaramu?'}},
+ {id:'trachea',c:{en:'Which tube is held open by C-shaped cartilage rings?',id:'Saluran mana yang dijaga tetap terbuka oleh cincin tulang rawan berbentuk C?'}},
+ {id:'alveoli',c:{en:'Where do oxygen and carbon dioxide swap places?',id:'Di mana oksigen dan karbon dioksida bertukar tempat?'}},
+ {id:'nose',c:{en:'Where is air first filtered, warmed and moistened?',id:'Di mana udara pertama kali disaring, dihangatkan, dan dilembapkan?'}},
+ {id:'lungs',c:{en:'Which spongy organs are divided into lobes?',id:'Organ seperti spons mana yang terbagi menjadi beberapa lobus?'}},
+ {id:'bronchioles',c:{en:'Which tiny tubes have NO cartilage rings?',id:'Saluran kecil mana yang TIDAK memiliki cincin tulang rawan?'}},
+ {id:'pharynx',c:{en:'Which part is used by both food and air?',id:'Bagian mana yang dilalui makanan dan udara?'}},
+];
+
+const MECH=[
+ {t:{en:"Diaphragm contracts and flattens",id:"Diafragma berkontraksi dan mendatar"},b:0},
+ {t:{en:"Diaphragm relaxes and becomes dome-shaped again",id:"Diafragma berelaksasi dan kembali melengkung seperti kubah"},b:1},
+ {t:{en:"External intercostal muscles contract",id:"Otot antartulang rusuk luar berkontraksi"},b:0},
+ {t:{en:"External intercostal muscles relax",id:"Otot antartulang rusuk luar berelaksasi"},b:1},
+ {t:{en:"Rib cage moves up and outward",id:"Tulang rusuk terangkat ke atas dan ke luar"},b:0},
+ {t:{en:"Rib cage moves down and inward",id:"Tulang rusuk turun ke bawah dan ke dalam"},b:1},
+ {t:{en:"Chest cavity volume increases",id:"Volume rongga dada membesar"},b:0},
+ {t:{en:"Chest cavity volume decreases",id:"Volume rongga dada mengecil"},b:1},
+ {t:{en:"Air pressure in the lungs becomes LOWER than outside",id:"Tekanan udara di paru-paru menjadi LEBIH RENDAH daripada di luar"},b:0},
+ {t:{en:"Air pressure in the lungs becomes HIGHER than outside",id:"Tekanan udara di paru-paru menjadi LEBIH TINGGI daripada di luar"},b:1},
+ {t:{en:"Air flows into the lungs",id:"Udara mengalir masuk ke paru-paru"},b:0},
+ {t:{en:"Air is pushed out of the lungs",id:"Udara terdorong keluar dari paru-paru"},b:1},
+];
+const MODEL_IN=[
+ {en:"Diaphragm <b>contracts</b> and flattens ⬇",id:"Diafragma <b>berkontraksi</b> dan mendatar ⬇"},
+ {en:"Intercostal muscles contract → ribs move <b>up & out</b>",id:"Otot antartulang rusuk berkontraksi → tulang rusuk bergerak <b>ke atas & ke luar</b>"},
+ {en:"Chest volume <b>increases</b> → lung pressure <b>falls</b>",id:"Volume rongga dada <b>membesar</b> → tekanan paru-paru <b>turun</b>"},
+ {en:"Air rushes <b>IN</b> 💨",id:"Udara mengalir <b>MASUK</b> 💨"}];
+const MODEL_OUT=[
+ {en:"Diaphragm <b>relaxes</b> and domes up ⬆",id:"Diafragma <b>berelaksasi</b> dan melengkung ke atas ⬆"},
+ {en:"Intercostal muscles relax → ribs move <b>down & in</b>",id:"Otot antartulang rusuk berelaksasi → tulang rusuk bergerak <b>ke bawah & ke dalam</b>"},
+ {en:"Chest volume <b>decreases</b> → lung pressure <b>rises</b>",id:"Volume rongga dada <b>mengecil</b> → tekanan paru-paru <b>naik</b>"},
+ {en:"Air is pushed <b>OUT</b> 💨",id:"Udara terdorong <b>KELUAR</b> 💨"}];
+
+const Q2=[
+ {q:{en:"The volume of air in one normal, quiet breath (tidal volume) is about…",id:"Volume udara dalam satu kali napas biasa (volume tidal) sekitar…"},
+  o:[{en:"50 mL",id:"50 mL"},{en:"500 mL",id:"500 mL"},{en:"3,500 mL",id:"3.500 mL"},{en:"10 L",id:"10 L"}],a:1,
+  e:{en:"About 500 mL. Vital capacity — the most air you can breathe out after your deepest breath in — is about 3.5–4.5 L.",id:"Sekitar 500 mL. Kapasitas vital — udara terbanyak yang dapat diembuskan setelah menarik napas sedalam-dalamnya — sekitar 3,5–4,5 L."}},
+ {q:{en:"In abdominal (belly) breathing, which muscle does most of the work?",id:"Pada pernapasan perut, otot apa yang paling berperan?"},
+  o:[{en:"Diaphragm",id:"Diafragma"},{en:"Intercostal muscles",id:"Otot antartulang rusuk"},{en:"Heart muscle",id:"Otot jantung"},{en:"Biceps",id:"Otot bisep"}],a:0,
+  e:{en:"Abdominal breathing uses the diaphragm. Chest breathing mainly uses the intercostal muscles between the ribs.",id:"Pernapasan perut menggunakan diafragma. Pernapasan dada terutama menggunakan otot antartulang rusuk (interkostal)."}},
+ {q:{en:"Why do you breathe faster and deeper when you run?",id:"Mengapa napasmu lebih cepat dan dalam saat berlari?"},
+  o:[{en:"Muscles make more CO₂ and need more O₂",id:"Otot menghasilkan lebih banyak CO₂ dan butuh lebih banyak O₂"},{en:"The lungs get smaller",id:"Paru-paru mengecil"},{en:"Air has less oxygen when you move",id:"Udara mengandung lebih sedikit oksigen saat kita bergerak"},{en:"To cool down the heart",id:"Untuk mendinginkan jantung"}],a:0,
+  e:{en:"Working muscles respire faster. The brain (medulla oblongata) detects the rising CO₂ in the blood and speeds up breathing.",id:"Otot yang bekerja melakukan respirasi lebih cepat. Otak (medula oblongata) mendeteksi kenaikan CO₂ dalam darah lalu mempercepat napas."}},
+ {q:{en:"Even after you breathe out as hard as you can, some air always stays in your lungs. This is called…",id:"Setelah mengembuskan napas sekuat mungkin, masih ada udara yang tertinggal di paru-paru. Udara ini disebut…"},
+  o:[{en:"Residual volume",id:"Volume residu (udara sisa)"},{en:"Tidal volume",id:"Volume tidal"},{en:"Inspiratory reserve volume",id:"Udara cadangan inspirasi"},{en:"Vital capacity",id:"Kapasitas vital"}],a:0,
+  e:{en:"About 1–1.5 L of residual air stays in the lungs so the alveoli don’t collapse.",id:"Sekitar 1–1,5 L udara residu tetap berada di paru-paru agar alveolus tidak mengempis."}},
+];
+
+const TOKENS={
+ glu:{f:"C₆H₁₂O₆",n:{en:"glucose",id:"glukosa"}},
+ o2:{f:"6 O₂",n:{en:"oxygen",id:"oksigen"}},
+ co2:{f:"6 CO₂",n:{en:"carbon dioxide",id:"karbon dioksida"}},
+ h2o:{f:"6 H₂O",n:{en:"water",id:"air"}},
+ atp:{f:"ATP",n:{en:"energy",id:"energi"}},
+ n2:{f:"N₂",n:{en:"nitrogen",id:"nitrogen"},why:{en:"Nitrogen makes up about 78% of air, but our cells don’t use it — we breathe it in and out unchanged.",id:"Nitrogen menyusun sekitar 78% udara, tetapi sel kita tidak menggunakannya — nitrogen dihirup dan diembuskan tanpa berubah."}},
+ eth:{f:"C₂H₅OH",n:{en:"alcohol",id:"alkohol"},why:{en:"Alcohol is made by yeast during fermentation (anaerobic), not in aerobic respiration.",id:"Alkohol dihasilkan ragi saat fermentasi (anaerob), bukan pada respirasi aerob."}},
+ lac:{f:"C₃H₆O₃",n:{en:"lactic acid",id:"asam laktat"},why:{en:"Lactic acid is made when muscles respire without enough oxygen (anaerobic).",id:"Asam laktat terbentuk saat otot melakukan respirasi tanpa cukup oksigen (anaerob)."}},
+};
+
+const Q4=[
+ {q:{en:"In which organelle does aerobic respiration mainly take place?",id:"Di organel manakah respirasi aerob terutama berlangsung?"},o:[{en:"Mitochondria",id:"Mitokondria"},{en:"Nucleus",id:"Inti sel (nukleus)"},{en:"Ribosome",id:"Ribosom"},{en:"Chloroplast",id:"Kloroplas"}],a:0,
+  e:{en:"Mitochondria are the cell’s “powerhouses”, where glucose and O₂ react to release energy (ATP).",id:"Mitokondria adalah “pembangkit energi” sel, tempat glukosa dan O₂ bereaksi menghasilkan energi (ATP)."}},
+ {q:{en:"How is breathing connected to cellular respiration?",id:"Apa hubungan antara bernapas dan respirasi sel?"},o:[{en:"Breathing brings O₂ to the cells and removes the CO₂ they make",id:"Bernapas membawa O₂ ke sel dan membuang CO₂ yang dihasilkan sel"},{en:"They are exactly the same thing",id:"Keduanya adalah hal yang sama persis"},{en:"Breathing makes glucose",id:"Bernapas menghasilkan glukosa"},{en:"Cells don’t need breathing at all",id:"Sel sama sekali tidak memerlukan pernapasan"}],a:0,
+  e:{en:"Breathing (ventilation) is the gas delivery service; cellular respiration is the chemical reaction inside cells that uses the O₂.",id:"Bernapas (ventilasi) adalah ‘layanan antar’ gas; respirasi sel adalah reaksi kimia di dalam sel yang memakai O₂ tersebut."}},
+ {q:{en:"Anaerobic respiration releases about 2 ATP per glucose. Aerobic respiration releases…",id:"Respirasi anaerob menghasilkan sekitar 2 ATP per glukosa. Respirasi aerob menghasilkan…"},o:[{en:"About 36–38 ATP",id:"Sekitar 36–38 ATP"},{en:"Exactly 2 ATP",id:"Tepat 2 ATP"},{en:"0 ATP",id:"0 ATP"},{en:"About 1 ATP",id:"Sekitar 1 ATP"}],a:0,
+  e:{en:"With oxygen, glucose is broken down completely, so much more energy is released (textbooks say 36–38 ATP; modern estimates are about 30–32).",id:"Dengan oksigen, glukosa diurai sempurna sehingga energi yang dilepas jauh lebih banyak (buku teks menyebut 36–38 ATP; perkiraan modern sekitar 30–32)."}},
+ {q:{en:"During a 100 m sprint your leg muscles run short of oxygen. What builds up and makes them tired?",id:"Saat lari cepat 100 m, otot kaki kekurangan oksigen. Zat apa yang menumpuk dan membuat otot lelah?"},o:[{en:"Lactic acid",id:"Asam laktat"},{en:"Alcohol",id:"Alkohol"},{en:"Glucose",id:"Glukosa"},{en:"Nitrogen",id:"Nitrogen"}],a:0,
+  e:{en:"Muscles switch to anaerobic respiration: glucose → lactic acid + a little energy. Panting afterwards repays the “oxygen debt”.",id:"Otot beralih ke respirasi anaerob: glukosa → asam laktat + sedikit energi. Napas terengah-engah setelahnya ‘membayar utang oksigen’."}},
+ {q:{en:"Yeast (ragi) used to make tapai or bread carries out alcoholic fermentation. What does it produce?",id:"Ragi yang dipakai untuk membuat tapai atau roti melakukan fermentasi alkohol. Apa yang dihasilkannya?"},o:[{en:"Ethanol (alcohol) + CO₂ + a little energy",id:"Etanol (alkohol) + CO₂ + sedikit energi"},{en:"Lactic acid + O₂",id:"Asam laktat + O₂"},{en:"Glucose + O₂",id:"Glukosa + O₂"},{en:"Only water",id:"Hanya air"}],a:0,
+  e:{en:"The CO₂ bubbles make bread dough rise; the ethanol gives tapai its sweet, slightly alcoholic taste.",id:"Gelembung CO₂ membuat adonan roti mengembang; etanol memberi tapai rasa manis yang sedikit beralkohol."}},
+ {q:{en:"Breathing out through a straw into clear limewater turns it cloudy. Which gas causes this?",id:"Meniupkan napas melalui sedotan ke air kapur jernih membuatnya keruh. Gas apa penyebabnya?"},o:[{en:"Carbon dioxide",id:"Karbon dioksida"},{en:"Oxygen",id:"Oksigen"},{en:"Nitrogen",id:"Nitrogen"},{en:"Water vapour",id:"Uap air"}],a:0,
+  e:{en:"CO₂ reacts with limewater (calcium hydroxide) to form chalky calcium carbonate — proof that we breathe out CO₂.",id:"CO₂ bereaksi dengan air kapur (kalsium hidroksida) membentuk kalsium karbonat yang keruh — bukti bahwa kita mengembuskan CO₂."}},
+ {q:{en:"Compared with inhaled air, exhaled air contains…",id:"Dibandingkan udara yang dihirup, udara yang diembuskan mengandung…"},o:[{en:"Less O₂ and more CO₂",id:"Lebih sedikit O₂ dan lebih banyak CO₂"},{en:"More O₂ and less CO₂",id:"Lebih banyak O₂ dan lebih sedikit CO₂"},{en:"No oxygen at all",id:"Tidak ada oksigen sama sekali"},{en:"Exactly the same gases",id:"Gas yang sama persis"}],a:0,
+  e:{en:"Inhaled air: ~21% O₂ and 0.04% CO₂. Exhaled air: ~16% O₂ and ~4% CO₂ — plus more water vapour.",id:"Udara hirup: ~21% O₂ dan 0,04% CO₂. Udara embus: ~16% O₂ dan ~4% CO₂ — ditambah lebih banyak uap air."}},
+];
+
+const DIS={
+ asthma:{n:{en:"Asthma",id:"Asma"},i:{en:"<b>Asthma:</b> the airways (bronchi and bronchioles) become inflamed and narrow when triggered by dust, smoke, cold air or allergens. It is not contagious and is controlled with inhalers and by avoiding triggers.",id:"<b>Asma:</b> saluran napas (bronkus dan bronkiolus) meradang dan menyempit saat dipicu debu, asap, udara dingin, atau alergen. Asma tidak menular dan dikendalikan dengan inhaler serta menghindari pemicunya."}},
+ tb:{n:{en:"Tuberculosis (TB)",id:"Tuberkulosis (TBC)"},i:{en:"<b>TB</b> is caused by the bacterium <i>Mycobacterium tuberculosis</i> and spreads through droplets from coughs. Indonesia has one of the highest numbers of TB cases in the world. TB can be cured by taking antibiotics every day for at least 6 months; the BCG vaccine protects children.",id:"<b>TBC</b> disebabkan oleh bakteri <i>Mycobacterium tuberculosis</i> dan menular melalui percikan batuk. Indonesia termasuk negara dengan kasus TBC terbanyak di dunia. TBC dapat disembuhkan dengan minum antibiotik setiap hari minimal 6 bulan; vaksin BCG melindungi anak-anak."}},
+ pneumonia:{n:{en:"Pneumonia",id:"Pneumonia (radang paru)"},i:{en:"<b>Pneumonia:</b> an infection (bacteria, viruses or fungi) inflames the alveoli and fills them with fluid or pus, so less O₂ can diffuse into the blood.",id:"<b>Pneumonia:</b> infeksi (bakteri, virus, atau jamur) membuat alveolus meradang dan terisi cairan atau nanah sehingga O₂ yang berdifusi ke darah berkurang."}},
+ bronchitis:{n:{en:"Bronchitis",id:"Bronkitis"},i:{en:"<b>Bronchitis:</b> inflammation of the bronchi, often after a cold or from smoking, causing a cough with lots of mucus.",id:"<b>Bronkitis:</b> peradangan pada bronkus, sering terjadi setelah flu atau akibat merokok, menyebabkan batuk dengan banyak dahak."}},
+ emphysema:{n:{en:"Emphysema",id:"Emfisema"},i:{en:"<b>Emphysema</b> (a type of COPD): smoke destroys the walls of the alveoli, so the surface area for gas exchange shrinks. The damage is permanent — not smoking is the best prevention.",id:"<b>Emfisema</b> (salah satu jenis PPOK): asap merusak dinding alveolus sehingga luas permukaan pertukaran gas berkurang. Kerusakannya permanen — tidak merokok adalah pencegahan terbaik."}},
+ cancer:{n:{en:"Lung cancer",id:"Kanker paru-paru"},i:{en:"<b>Lung cancer:</b> cells in the lung grow out of control and form a tumour. Most cases are linked to smoking, because tobacco smoke contains dozens of cancer-causing chemicals (carcinogens).",id:"<b>Kanker paru-paru:</b> sel di paru-paru tumbuh tidak terkendali dan membentuk tumor. Sebagian besar kasus berkaitan dengan merokok karena asap rokok mengandung puluhan zat penyebab kanker (karsinogen)."}},
+ laryngitis:{n:{en:"Laryngitis",id:"Laringitis"},i:{en:"<b>Laryngitis:</b> inflammation of the larynx and vocal cords from overuse or infection. Resting your voice and drinking warm water help.",id:"<b>Laringitis:</b> peradangan laring dan pita suara karena terlalu banyak dipakai atau infeksi. Mengistirahatkan suara dan minum air hangat dapat membantu."}},
+ flu:{n:{en:"Influenza / common cold (ISPA)",id:"Influenza / pilek (ISPA)"},i:{en:"An acute respiratory infection (<b>ISPA</b>) caused by viruses and spread by droplets. Wash your hands, cover coughs and sneezes, and wear a mask when you are sick.",id:"<b>ISPA</b> (Infeksi Saluran Pernapasan Akut) yang disebabkan virus dan menular lewat percikan. Cuci tangan, tutup mulut saat batuk/bersin, dan pakai masker saat sakit."}},
+};
+const CASES=[
+ {d:'asthma',av:'👧',nm:'Rina, 13',s:{en:"During PE on a dusty field, Rina suddenly starts wheezing (a whistling sound when breathing) and her chest feels tight. It happens again whenever she breathes cold air or smoke.",id:"Saat olahraga di lapangan berdebu, Rina tiba-tiba mengi (bunyi ‘ngik-ngik’ saat bernapas) dan dadanya terasa sesak. Hal ini terulang setiap kali ia menghirup udara dingin atau asap."}},
+ {d:'tb',av:'👨',nm:'Pak Budi, 45',s:{en:"Pak Budi has been coughing for more than 3 weeks, sometimes with blood. He sweats at night, has a mild fever and keeps losing weight. A neighbour had the same illness.",id:"Pak Budi sudah batuk lebih dari 3 minggu, kadang disertai darah. Ia berkeringat di malam hari, demam ringan, dan berat badannya terus turun. Tetangganya pernah sakit yang sama."}},
+ {d:'pneumonia',av:'👦',nm:'Dimas, 10',s:{en:"Dimas has a high fever, chills and a cough with thick yellow phlegm. His breathing is fast and painful. The X-ray shows his air sacs are filled with fluid.",id:"Dimas demam tinggi, menggigil, dan batuk berdahak kuning kental. Napasnya cepat dan terasa nyeri. Hasil rontgen menunjukkan kantong udaranya terisi cairan."}},
+ {d:'bronchitis',av:'👩',nm:'Sari, 16',s:{en:"A week after catching a cold, Sari has a nagging cough that brings up lots of mucus, and her chest feels sore. The doctor says the two large tubes branching from her trachea are inflamed.",id:"Seminggu setelah pilek, Sari batuk terus-menerus dengan banyak dahak dan dadanya terasa nyeri. Dokter mengatakan dua saluran besar cabang dari trakeanya meradang."}},
+ {d:'emphysema',av:'👴',nm:'Opa Herman, 70',s:{en:"Opa Herman smoked for 40 years. Now he is out of breath even when walking slowly. Tests show the thin walls between his air sacs are broken, leaving less surface for gas exchange.",id:"Opa Herman merokok selama 40 tahun. Kini ia sesak napas bahkan saat berjalan pelan. Hasil tes menunjukkan dinding tipis antar-kantong udaranya rusak sehingga permukaan pertukaran gas berkurang."}},
+ {d:'cancer',av:'🧔',nm:'Pak Joko, 58',s:{en:"Pak Joko, a heavy smoker, has a long-lasting cough and chest pain. A CT scan shows a lump of abnormal cells growing out of control in his lung.",id:"Pak Joko, seorang perokok berat, mengalami batuk berkepanjangan dan nyeri dada. CT scan menunjukkan benjolan sel abnormal yang tumbuh tak terkendali di paru-parunya."}},
+ {d:'laryngitis',av:'🧑',nm:'Ayu, 14',s:{en:"Ayu cheered very loudly for her school team at a futsal match. The next morning her voice is hoarse and almost gone, but her breathing is fine.",id:"Ayu bersorak sangat keras mendukung tim sekolahnya di pertandingan futsal. Esok paginya suaranya serak dan hampir hilang, tetapi napasnya baik-baik saja."}},
+ {d:'flu',av:'🧒',nm:'Bagas, 12',s:{en:"Bagas has a runny nose, keeps sneezing, and has a sore throat and a mild fever. Several classmates have the same symptoms this week.",id:"Bagas pilek, terus bersin, sakit tenggorokan, dan demam ringan. Beberapa teman sekelasnya mengalami gejala yang sama minggu ini."}},
+];
+const HEALTH=[
+ {t:{en:"Exercising regularly",id:"Berolahraga secara teratur"},b:0,e:{en:"Exercise strengthens your breathing muscles.",id:"Olahraga memperkuat otot-otot pernapasan."}},
+ {t:{en:"Smoking cigarettes",id:"Merokok"},b:1,e:{en:"Smoke paralyses cilia and damages alveoli.",id:"Asap rokok melumpuhkan silia dan merusak alveolus."}},
+ {t:{en:"Using vapes / e-cigarettes",id:"Menggunakan vape / rokok elektrik"},b:1,e:{en:"Vape aerosol contains nicotine and chemicals that irritate the airways.",id:"Aerosol vape mengandung nikotin dan zat kimia yang mengiritasi saluran napas."}},
+ {t:{en:"Wearing a mask during haze from forest fires",id:"Memakai masker saat ada kabut asap kebakaran hutan"},b:0,e:{en:"Masks (especially N95) filter out fine smoke particles.",id:"Masker (terutama N95) menyaring partikel asap yang halus."}},
+ {t:{en:"Breathing traffic exhaust fumes every day",id:"Menghirup asap knalpot kendaraan setiap hari"},b:1,e:{en:"Exhaust contains CO and fine particles (PM2.5).",id:"Asap knalpot mengandung CO dan partikel halus (PM2,5)."}},
+ {t:{en:"Getting the BCG vaccine",id:"Mendapat vaksin BCG"},b:0,e:{en:"BCG helps protect children from severe TB.",id:"BCG membantu melindungi anak dari TBC berat."}},
+ {t:{en:"Covering your mouth when you cough or sneeze",id:"Menutup mulut saat batuk atau bersin"},b:0,e:{en:"It stops the droplets that spread TB and flu.",id:"Ini mencegah percikan yang menularkan TBC dan flu."}},
+ {t:{en:"Burning rubbish near houses",id:"Membakar sampah di dekat rumah"},b:1,e:{en:"Burning rubbish releases toxic smoke.",id:"Membakar sampah melepaskan asap beracun."}},
+ {t:{en:"Opening windows so rooms get fresh air",id:"Membuka jendela agar ruangan mendapat udara segar"},b:0,e:{en:"Good ventilation reduces the spread of germs.",id:"Ventilasi yang baik mengurangi penyebaran kuman."}},
+ {t:{en:"Sitting next to someone who is smoking",id:"Duduk di dekat orang yang sedang merokok"},b:1,e:{en:"Second-hand smoke harms non-smokers too.",id:"Asap rokok orang lain juga membahayakan (perokok pasif)."}},
+];
+
+const POOL=[
+ {q:{en:"About what percentage of inhaled air is oxygen?",id:"Berapa persen kira-kira kandungan oksigen dalam udara yang kita hirup?"},o:["21%","78%","4%","50%"],a:0,e:{en:"Air is about 78% nitrogen, 21% oxygen and 1% other gases.",id:"Udara terdiri atas sekitar 78% nitrogen, 21% oksigen, dan 1% gas lain."}},
+ {q:{en:"Which part of the brain controls your breathing rate?",id:"Bagian otak manakah yang mengatur laju pernapasan?"},o:[{en:"Medulla oblongata",id:"Medula oblongata"},{en:"Cerebrum",id:"Otak besar (serebrum)"},{en:"Cerebellum",id:"Otak kecil (serebelum)"},{en:"Pituitary gland",id:"Kelenjar hipofisis"}],a:0,e:{en:"The medulla oblongata in the brainstem sets the rhythm of breathing.",id:"Medula oblongata di batang otak mengatur irama pernapasan."}},
+ {q:{en:"What is the main signal that makes your brain speed up breathing?",id:"Apa sinyal utama yang membuat otak mempercepat pernapasan?"},o:[{en:"A rise in CO₂ in the blood",id:"Kenaikan kadar CO₂ dalam darah"},{en:"A rise in O₂ in the blood",id:"Kenaikan kadar O₂ dalam darah"},{en:"A drop in body temperature",id:"Penurunan suhu tubuh"},{en:"Eating a big meal",id:"Makan dalam jumlah banyak"}],a:0,e:{en:"Sensors (chemoreceptors) are very sensitive to CO₂, which makes the blood more acidic.",id:"Sensor (kemoreseptor) sangat peka terhadap CO₂ yang membuat darah lebih asam."}},
+ {q:{en:"Most CO₂ is carried in the blood as…",id:"Sebagian besar CO₂ diangkut dalam darah dalam bentuk…"},o:[{en:"Bicarbonate ions (HCO₃⁻) in plasma",id:"Ion bikarbonat (HCO₃⁻) dalam plasma"},{en:"Bubbles of gas",id:"Gelembung gas"},{en:"Glucose",id:"Glukosa"},{en:"Bound to platelets",id:"Terikat pada keping darah"}],a:0,e:{en:"About 70% as bicarbonate, about 23% bound to haemoglobin and about 7% dissolved in plasma.",id:"Sekitar 70% sebagai bikarbonat, sekitar 23% terikat hemoglobin, dan sekitar 7% larut dalam plasma."}},
+ {q:{en:"When O₂ joins haemoglobin in red blood cells it forms…",id:"Saat O₂ berikatan dengan hemoglobin di sel darah merah, terbentuk…"},o:[{en:"Oxyhaemoglobin",id:"Oksihemoglobin"},{en:"Carboxyhaemoglobin",id:"Karboksihemoglobin"},{en:"Plasma",id:"Plasma"},{en:"Mucus",id:"Lendir"}],a:0,e:{en:"Oxyhaemoglobin is bright red. Carboxyhaemoglobin forms with carbon monoxide.",id:"Oksihemoglobin berwarna merah cerah. Karboksihemoglobin terbentuk dengan karbon monoksida."}},
+ {q:{en:"Which substance coats the inside of the alveoli and stops them from collapsing?",id:"Zat apa yang melapisi bagian dalam alveolus dan mencegahnya mengempis?"},o:[{en:"Surfactant",id:"Surfaktan"},{en:"Saliva",id:"Air liur"},{en:"Bile",id:"Empedu"},{en:"Plasma",id:"Plasma"}],a:0,e:{en:"Surfactant lowers the surface tension of the thin layer of water inside the alveoli.",id:"Surfaktan menurunkan tegangan permukaan lapisan air tipis di dalam alveolus."}},
+ {q:{en:"Which feature does NOT help alveoli exchange gases?",id:"Ciri manakah yang TIDAK membantu alveolus bertukar gas?"},o:[{en:"Thick, muscular walls",id:"Dinding tebal dan berotot"},{en:"Walls only one cell thick",id:"Dinding setebal satu sel"},{en:"A huge surface area",id:"Permukaan yang sangat luas"},{en:"Lots of capillaries",id:"Banyak kapiler"}],a:0,e:{en:"Alveoli have thin, moist walls, a huge surface area and many capillaries. Thick walls would slow diffusion.",id:"Alveolus berdinding tipis dan lembap, permukaannya luas, dan dikelilingi banyak kapiler. Dinding tebal akan memperlambat difusi."}},
+ {q:{en:"Which structure stops food from entering the trachea when you swallow?",id:"Struktur apa yang mencegah makanan masuk ke trakea saat menelan?"},o:[{en:"Epiglottis",id:"Epiglotis"},{en:"Diaphragm",id:"Diafragma"},{en:"Bronchus",id:"Bronkus"},{en:"Alveolus",id:"Alveolus"}],a:0,e:{en:"The epiglottis folds down over the larynx like a lid.",id:"Epiglotis menutup laring seperti tutup."}},
+ {q:{en:"Gases move between the alveoli and the blood by…",id:"Gas berpindah antara alveolus dan darah secara…"},o:[{en:"Diffusion",id:"Difusi"},{en:"Osmosis",id:"Osmosis"},{en:"Digestion",id:"Pencernaan"},{en:"Filtration by cilia",id:"Penyaringan oleh silia"}],a:0,e:{en:"Diffusion: from high to low concentration, no energy needed.",id:"Difusi: dari konsentrasi tinggi ke rendah, tanpa memerlukan energi."}},
+ {q:{en:"A normal resting breathing rate for an adult is about…",id:"Frekuensi napas normal orang dewasa saat istirahat sekitar…"},o:[{en:"12–20 breaths per minute",id:"12–20 kali per menit"},{en:"2–4 breaths per minute",id:"2–4 kali per menit"},{en:"60–80 breaths per minute",id:"60–80 kali per menit"},{en:"100–120 breaths per minute",id:"100–120 kali per menit"}],a:0,e:{en:"Children and babies breathe a little faster than adults.",id:"Anak-anak dan bayi bernapas sedikit lebih cepat daripada orang dewasa."}},
+ {q:{en:"Carbon monoxide (CO) is dangerous because it…",id:"Karbon monoksida (CO) berbahaya karena…"},o:[{en:"Binds to haemoglobin much more strongly than O₂",id:"Mengikat hemoglobin jauh lebih kuat daripada O₂"},{en:"Makes the lungs bigger",id:"Membuat paru-paru membesar"},{en:"Is a nutrient for cells",id:"Merupakan nutrisi bagi sel"},{en:"Cools the blood",id:"Mendinginkan darah"}],a:0,e:{en:"CO blocks oxygen transport. Never run a generator or burn charcoal in a closed room.",id:"CO menghalangi pengangkutan oksigen. Jangan menyalakan genset atau membakar arang di ruang tertutup."}},
+ {q:{en:"What do the cilia in the trachea do?",id:"Apa fungsi silia di trakea?"},o:[{en:"Sweep mucus and trapped dust up toward the throat",id:"Menyapu lendir dan debu ke arah tenggorokan"},{en:"Exchange gases",id:"Menukar gas"},{en:"Make sounds",id:"Menghasilkan suara"},{en:"Pump blood",id:"Memompa darah"}],a:0,e:{en:"The mucus is then swallowed or coughed out.",id:"Lendir itu kemudian tertelan atau dibatukkan."}},
+ {q:{en:"When you breathe in, the diaphragm…",id:"Saat kamu menarik napas, diafragma…"},o:[{en:"Contracts and flattens",id:"Berkontraksi dan mendatar"},{en:"Relaxes and domes upward",id:"Berelaksasi dan melengkung ke atas"},{en:"Moves into the throat",id:"Bergerak ke tenggorokan"},{en:"Does not move",id:"Tidak bergerak"}],a:0,e:{en:"Flattening the diaphragm makes the chest cavity bigger, so air flows in.",id:"Diafragma yang mendatar memperbesar rongga dada sehingga udara masuk."}},
+ {q:{en:"How many lobes does the RIGHT lung have?",id:"Paru-paru KANAN memiliki berapa lobus?"},o:["3","2","4","1"],a:0,e:{en:"Right = 3 lobes, left = 2 lobes (there’s a notch for the heart).",id:"Kanan = 3 lobus, kiri = 2 lobus (ada lekukan untuk jantung)."}},
+ {q:{en:"Which of these respiratory diseases is caused by bacteria?",id:"Penyakit pernapasan manakah yang disebabkan oleh bakteri?"},o:[{en:"Tuberculosis",id:"Tuberkulosis (TBC)"},{en:"Asthma",id:"Asma"},{en:"Emphysema",id:"Emfisema"},{en:"Lung cancer",id:"Kanker paru-paru"}],a:0,e:{en:"TB is caused by Mycobacterium tuberculosis. The others are not infections.",id:"TBC disebabkan oleh Mycobacterium tuberculosis. Yang lain bukan infeksi."}},
+ {q:{en:"Why do many smokers have a ‘smoker’s cough’?",id:"Mengapa banyak perokok mengalami ‘batuk perokok’?"},o:[{en:"Smoke damages cilia, so mucus builds up and must be coughed out",id:"Asap merusak silia sehingga lendir menumpuk dan harus dibatukkan"},{en:"Smoke adds extra oxygen",id:"Asap menambah oksigen"},{en:"Smoking makes the lungs stronger",id:"Merokok membuat paru-paru lebih kuat"},{en:"Nicotine is a vitamin",id:"Nikotin adalah vitamin"}],a:0,e:{en:"Without working cilia, coughing is the only way to clear the mucus.",id:"Tanpa silia yang berfungsi, batuk menjadi satu-satunya cara membersihkan lendir."}},
+ {q:{en:"Why does O₂ move from the alveoli into the blood?",id:"Mengapa O₂ berpindah dari alveolus ke darah?"},o:[{en:"O₂ concentration is higher in the alveoli than in the blood",id:"Konsentrasi O₂ di alveolus lebih tinggi daripada di darah"},{en:"The blood has more O₂ than the alveoli",id:"Darah mengandung lebih banyak O₂ daripada alveolus"},{en:"The heart sucks it in",id:"Jantung menyedotnya"},{en:"Cilia push it",id:"Silia mendorongnya"}],a:0,e:{en:"Gases always diffuse down a concentration gradient.",id:"Gas selalu berdifusi menuruni gradien konsentrasi."}},
+ {q:{en:"The products of aerobic respiration are…",id:"Hasil respirasi aerob adalah…"},o:[{en:"CO₂, water and energy",id:"CO₂, air, dan energi"},{en:"Glucose and oxygen",id:"Glukosa dan oksigen"},{en:"Lactic acid only",id:"Asam laktat saja"},{en:"Nitrogen and water",id:"Nitrogen dan air"}],a:0,e:{en:"C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + energy (ATP).",id:"C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + energi (ATP)."}},
+ {q:{en:"Which order shows the correct path of air?",id:"Urutan manakah yang menunjukkan jalur udara yang benar?"},o:[{en:"Nose → pharynx → larynx → trachea → bronchi → bronchioles → alveoli",id:"Hidung → faring → laring → trakea → bronkus → bronkiolus → alveolus"},{en:"Nose → larynx → pharynx → bronchi → trachea → alveoli → bronchioles",id:"Hidung → laring → faring → bronkus → trakea → alveolus → bronkiolus"},{en:"Nose → trachea → pharynx → alveoli → bronchi",id:"Hidung → trakea → faring → alveolus → bronkus"},{en:"Mouth → oesophagus → stomach → lungs",id:"Mulut → kerongkongan → lambung → paru-paru"}],a:0,e:{en:"Remember: Nose, Pharynx, Larynx, Trachea, Bronchi, Bronchioles, Alveoli.",id:"Ingat: Hidung, Faring, Laring, Trakea, Bronkus, Bronkiolus, Alveolus."}},
+ {q:{en:"What does the fluid between the two layers of the pleura do?",id:"Apa fungsi cairan di antara dua lapisan pleura?"},o:[{en:"Reduces friction as the lungs move",id:"Mengurangi gesekan saat paru-paru bergerak"},{en:"Carries oxygen",id:"Mengangkut oksigen"},{en:"Digests dust",id:"Mencerna debu"},{en:"Makes the voice",id:"Menghasilkan suara"}],a:0,e:{en:"Pleural fluid lets the lungs slide smoothly against the chest wall.",id:"Cairan pleura membuat paru-paru bergeser dengan lancar terhadap dinding dada."}},
+];
+
+/* ---------- Sound ---------- */
+let AC=null;
+function beep(f,d=.12,type='sine',v=.14){ if(muted) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); const o=AC.createOscillator(),g=AC.createGain(); o.type=type;o.frequency.value=f; g.gain.setValueAtTime(v,AC.currentTime); g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d); o.connect(g);g.connect(AC.destination); o.start(); o.stop(AC.currentTime+d) }catch(e){} }
+const sfx={ ok(){beep(660,.1);setTimeout(()=>beep(880,.14),80)}, bad(){beep(190,.25,'square',.06)}, pop(){beep(950,.06,'triangle',.1)}, win(){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.2),i*120))} };
+
+/* ---------- Bubble the Maltese ---------- */
+function bubbleSVG(mood='happy',size=96){
+ const mouth = mood==='sad' ? '<path d="M53 82 Q60 76 67 82" stroke="#1d2b45" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
+  : '<path d="M53 77 Q60 84 67 77" stroke="#1d2b45" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="60" cy="83" rx="4.5" ry="5" fill="#ff8fb1"/>';
+ return `<svg viewBox="0 0 120 120" width="${size}" height="${size}" aria-label="Bubble">
+ <ellipse cx="60" cy="112" rx="34" ry="5" fill="#000" opacity=".07"/>
+ <path d="M26 44 C6 58 8 104 26 112 C38 104 40 72 38 50Z" fill="#fff" stroke="#dce5f0" stroke-width="2"/>
+ <path d="M94 44 C114 58 112 104 94 112 C82 104 80 72 82 50Z" fill="#fff" stroke="#dce5f0" stroke-width="2"/>
+ <path d="M30 70 C30 100 90 100 90 70" fill="#fff" stroke="#dce5f0" stroke-width="2"/>
+ <ellipse cx="60" cy="60" rx="34" ry="32" fill="#fff" stroke="#dce5f0" stroke-width="2"/>
+ <path d="M46 32 C48 18 72 18 74 32" fill="#fff" stroke="#dce5f0" stroke-width="2"/>
+ <path d="M47 22 L60 28 L47 34Z M73 22 L60 28 L73 34Z" fill="#ff7aa8"/><circle cx="60" cy="28" r="3.5" fill="#ff4f8b"/>
+ <ellipse cx="60" cy="74" rx="15" ry="11" fill="#f8fbff"/>
+ <circle cx="47" cy="58" r="5.5" fill="#1d2b45"/><circle cx="73" cy="58" r="5.5" fill="#1d2b45"/>
+ <circle cx="49" cy="56" r="1.8" fill="#fff"/><circle cx="75" cy="56" r="1.8" fill="#fff"/>
+ <ellipse cx="60" cy="70" rx="5.5" ry="4" fill="#1d2b45"/>
+ ${mouth}
+ <ellipse cx="38" cy="70" rx="5" ry="3" fill="#ff9fbf" opacity=".5"/><ellipse cx="82" cy="70" rx="5" ry="3" fill="#ff9fbf" opacity=".5"/>
+ </svg>`;
+}
+const guide = (html,mood) => `<div class="guide">${bubbleSVG(mood)}<div class="speech">${html}</div></div>`;
+const starsHTML = n => [1,2,3].map(i=>`<span class="${i<=n?'':'off'}">⭐</span>`).join('');
+const calcStars = (m,[a,b]) => m<=a?3:m<=b?2:1;
+const head = (i,sub='') => `<div class="lhead"><button class="btn ghost sm" onclick="home()">🏠 ${t('menu')}</button><h2>${LEVELS[i].icon} ${t('level')} ${i+1}: ${tx(LEVELS[i].name)}</h2>${sub?`<span class="pill">${sub}</span>`:''}</div>`;
+
+/* ---------- Core ---------- */
+function show(s){ if(screen&&screen.cleanup) screen.cleanup(); screen=s; s.draw(); updateHeader(); window.scrollTo({top:0}) }
+function applyT(){ document.querySelectorAll('[data-t]').forEach(e=>e.innerHTML=t(e.dataset.t)) }
+function updateHeader(){
+ const total=Object.values(save.best).reduce((a,b)=>a+b,0), st=Object.values(save.stars).reduce((a,b)=>a+b,0);
+ $('#total').textContent=`⭐ ${st}/18 · ${total} ${t('pts')}`;
+ document.querySelectorAll('#langBtn b').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+ $('#muteBtn').textContent=muted?'🔇':'🔊';
+ document.documentElement.lang=lang;
+ document.title = lang==='id'?'BreathQuest – Petualangan Sistem Pernapasan':'BreathQuest – Respiratory System Adventure';
+}
+function toggleLang(){ lang = lang==='en'?'id':'en'; save.lang=lang; persist(); updateHeader(); if(screen) screen.draw() }
+function toggleMute(){ muted=!muted; save.muted=muted; persist(); updateHeader() }
+function confetti(){ const c=['#2b7de9','#ff7aa8','#ffc93c','#24a865','#9b6bff']; for(let i=0;i<70;i++){ const d=document.createElement('div'); d.className='confetti'; d.style.left=Math.random()*100+'vw'; d.style.background=rand(c); d.style.animationDuration=(1.8+Math.random()*1.8)+'s'; d.style.animationDelay=Math.random()*.5+'s'; document.body.appendChild(d); setTimeout(()=>d.remove(),4200) } }
+const allDone = () => LEVELS.every(L=>(save.stars[L.id]||0)>0);
+
+function home(){
+ show({draw(){
+  A={};
+  app.innerHTML = `<div class="hero"><h1>🫁 ${t('welcomeTitle')}</h1><p class="sub">${t('welcomeSub')}</p>${guide(t('welcome'))}</div>
+  <div class="grid">${LEVELS.map((L,i)=>`<button class="lvl" onclick="startLevel(${i})">
+    <div class="lvl-top"><div class="lvl-icon">${L.icon}</div><div><div class="lvl-num">${t('level')} ${i+1}</div><h3>${tx(L.name)}</h3></div></div>
+    <p>${tx(L.desc)}</p><div class="stars">${starsHTML(save.stars[L.id]||0)}</div></button>`).join('')}</div>
+  <div class="row">${allDone()?`<button class="btn pink big" onclick="certificate()">🎓 ${t('getCert')}</button>`:`<p class="hint">${t('certHint')}</p>`}</div>
+  <div class="foot"><button onclick="resetAll()">${t('reset')}</button></div>`;
+ }});
+}
+function resetAll(){ if(confirm(t('resetQ'))){ save.stars={}; save.best={}; save.name=''; persist(); home() } }
+function startLevel(i){ [L1,L2,L3,L4,L5,L6][i]() }
+
+function finish(i, stars, pts){
+ const L=LEVELS[i];
+ save.stars[L.id]=Math.max(save.stars[L.id]||0,stars);
+ save.best[L.id]=Math.max(save.best[L.id]||0,Math.round(pts));
+ persist(); sfx.win(); if(stars===3) confetti();
+ show({draw(){
+  A={};
+  app.innerHTML=`<div class="panel center">
+   <h2 style="color:var(--navy);margin:0">${L.icon} ${t('levelDone')}</h2>
+   <div class="bigstars">${starsHTML(stars)}</div>
+   <p style="font-size:1.2rem;margin:0 0 10px">${t('points')}: <b>${Math.round(pts)}</b></p>
+   <div style="text-align:left">${guide(tx(starMsg[stars]), stars===1?'sad':'happy')}</div>
+   <div class="explain" style="text-align:left">💡 <b>${t('funFact')}</b> ${tx(L.fact)}</div>
+   <div class="row"><button class="btn ghost" onclick="startLevel(${i})">🔁 ${t('retry')}</button>
+   ${i<5?`<button class="btn" onclick="startLevel(${i+1})">${t('next')} ➜</button>`:(allDone()?`<button class="btn pink" onclick="certificate()">🎓 ${t('getCert')}</button>`:`<button class="btn" onclick="home()">🏠 ${t('menu')}</button>`)}</div>
+  </div>`;
+ }});
+}
+
+/* ---------- Reusable: multiple-choice quiz ---------- */
+function Quiz(qs, opt){
+ const st={i:0, order:qs.map(q=>shuffle(q.o.map((_,k)=>k))), picked:null, correct:0, wrong:0, pts:0, hearts:opt.hearts||0, left:opt.timer||0, tid:null};
+ function stopTimer(){ clearInterval(st.tid); st.tid=null }
+ function startTimer(){ if(!opt.timer) return; stopTimer(); st.left=opt.timer; st.tid=setInterval(()=>{ st.left--; const e=$('#qt'); if(e){ e.textContent=st.left; e.parentElement.classList.toggle('low',st.left<=5) } if(st.left<=0) pick(-1) },1000) }
+ function pick(k){ if(st.picked!==null) return; stopTimer(); st.picked=k; const q=qs[st.i];
+  if(k===q.a){ st.correct++; st.pts+=10+(opt.timer?st.left:0); sfx.ok() } else { st.wrong++; if(opt.hearts) st.hearts--; sfx.bad() } draw() }
+ function next(){ st.i++; st.picked=null; if(st.i>=qs.length||(opt.hearts&&st.hearts<=0)){ stopTimer(); opt.onDone(st); return } draw(); startTimer() }
+ function draw(){
+  A={pick,next};
+  const q=qs[st.i], done=st.picked!==null, ok=st.picked===q.a, last=st.i===qs.length-1||(opt.hearts&&st.hearts<=0);
+  app.innerHTML=`${opt.head()}<div class="panel">
+   <div class="qtop"><span>${t('question')} ${st.i+1}/${qs.length}</span>
+    ${opt.hearts?`<span>${'❤️'.repeat(Math.max(0,st.hearts))}${'🤍'.repeat(opt.hearts-Math.max(0,st.hearts))}</span>`:''}
+    ${opt.timer?`<span class="timer ${st.left<=5&&!done?'low':''}">⏱ <b id="qt">${st.left}</b></span>`:''}</div>
+   <div class="bar"><i style="width:${(st.i+(done?1:0))/qs.length*100}%"></i></div>
+   <h3 class="q">${tx(q.q)}</h3>
+   <div class="opts">${st.order[st.i].map(k=>`<button class="opt ${done?(k===q.a?'right':(k===st.picked?'wrong':'dim')):''}" ${done?'disabled':''} onclick="A.pick(${k})">${tx(q.o[k])}</button>`).join('')}</div>
+   ${done?`<div class="fb ${ok?'good':'bad'}"><b>${ok?rand(t('yay')):(st.picked===-1?t('timeUp'):t('nope'))}</b> ${tx(q.e)}</div>
+   ${opt.hearts&&st.hearts<=0?`<p class="hint"><b>${t('gameOver')}</b></p>`:''}
+   <div class="row end"><button class="btn" onclick="A.next()">${last?'🏁 ':''}${t('nextQ')} ➜</button></div>`:''}
+  </div>`;
+ }
+ return {draw, start(){ draw(); startTimer() }, cleanup:stopTimer, st};
+}
+
+/* ---------- Reusable: one-card-at-a-time sorter ---------- */
+function Sorter(cards, bins, opt){
+ const st={i:0, mistakes:0, fb:null, count:[0,0], order:shuffle(cards), lock:false};
+ function choose(b){ if(st.lock) return; const c=st.order[st.i]; if(!c) return; const ok=c.b===b;
+  ok?sfx.ok():(sfx.bad(),st.mistakes++); st.count[c.b]++; st.fb={ok,c}; st.i++;
+  if(st.i>=st.order.length){ st.lock=true; draw(); setTimeout(()=>opt.onDone(st),1300) } else draw();
+  if(!ok){ const z=$('.cardzone'); z&&z.classList.add('shake') } }
+ function draw(){
+  A={choose}; const c=st.order[st.i];
+  app.innerHTML=`${opt.head()}<div class="panel">${guide(opt.prompt(), st.fb&&!st.fb.ok?'sad':'happy')}
+   <div class="qtop"><span>${Math.min(st.i+1,st.order.length)}/${st.order.length}</span><span>${t('mistakes')}: ${st.mistakes}</span></div>
+   <div class="bar"><i style="width:${st.i/st.order.length*100}%"></i></div>
+   <div class="cardzone">${c?`<div class="scard pop">${tx(c.t)}</div>`:`<div class="scard pop">✅</div>`}</div>
+   <div class="sorter">${bins.map((b,k)=>`<button class="bin ${b.cls}" onclick="A.choose(${k})" ${c?'':'disabled'}><div class="bicon">${b.icon}</div><b>${tx(b.label)}</b><small>${st.count[k]}</small></button>`).join('')}</div>
+   ${st.fb?`<div class="fb ${st.fb.ok?'good':'bad'}"><b>${st.fb.ok?'✔ '+rand(t('yay')):'✘ '+t('nope')}</b> “${tx(st.fb.c.t)}” ${st.fb.ok?'':`— ${t('belongs')} <b>${tx(bins[st.fb.c.b].label)}</b>.`} ${st.fb.c.e?tx(st.fb.c.e):''}</div>`:''}
+  </div>`;
+ }
+ return {draw, st};
+}
+
+/* =========================================================
+   LEVEL 1 – Anatomy: The Air Path
+   ========================================================= */
+function anatomySVG(){
+ const P=(id,inner)=>`<g class="part" data-id="${id}">${inner}</g>`;
+ const LL="M186 292 C130 272 72 330 70 420 C68 452 92 466 128 462 C166 458 186 444 188 424 Z";
+ const RL="M234 292 C290 272 348 330 350 420 C352 452 328 466 292 462 C254 458 234 444 232 424 Z";
+ const BR="M182 304 C165 318 145 330 122 350 M160 322 C150 350 138 378 110 398 M150 342 C160 368 166 398 160 428 M136 336 C112 356 96 380 92 410";
+ const ALV=[[122,350],[110,398],[160,428],[92,410]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6"/><circle cx="${x-6}" cy="${y+6}" r="5"/><circle cx="${x+6}" cy="${y+5}" r="5"/>`).join('');
+ let rings=''; for(let y=184;y<=262;y+=11) rings+=`<path d="M198 ${y} h24" stroke="#e2a594" stroke-width="3"/>`;
+ return `<svg viewBox="0 0 420 510" xmlns="http://www.w3.org/2000/svg">
+ <defs><radialGradient id="lg" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffc7d2"/><stop offset="1" stop-color="#f7839e"/></radialGradient></defs>
+ <path d="M150 22 Q210 -8 270 22 Q302 62 282 110 L262 132 L158 132 L138 110 Q118 62 150 22Z" fill="#fff3ec" stroke="#f3d6c8" stroke-width="2" pointer-events="none"/>
+ ${P('pharynx',`<rect x="193" y="80" width="34" height="56" rx="12" fill="#ffb3a1" stroke="#e08a76" stroke-width="2"/>`)}
+ ${P('nose',`<ellipse cx="210" cy="60" rx="46" ry="21" fill="#ffd2c4" stroke="#e79a86" stroke-width="2"/><path d="M178 60 h64" stroke="#e79a86" stroke-width="2" stroke-dasharray="4 4"/><path d="M196 52 q4 6 0 12 M224 52 q-4 6 0 12" stroke="#d98a76" stroke-width="2" fill="none"/>`)}
+ ${P('epiglottis',`<circle cx="236" cy="138" r="15" fill="transparent"/><path d="M220 140 q18 -14 28 -2 q-12 0 -26 6z" fill="#ff7f6a" stroke="#c9604c" stroke-width="1.5"/>`)}
+ ${P('larynx',`<rect x="186" y="142" width="48" height="34" rx="10" fill="#ff9c86" stroke="#d97862" stroke-width="2"/><path d="M201 150 L208 168 M219 150 L212 168" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`)}
+ ${P('trachea',`<rect x="196" y="176" width="28" height="94" rx="6" fill="#ffd0c4" stroke="#e2a594" stroke-width="2"/>${rings}`)}
+ ${P('pleura',`<path d="${LL}" fill="none" stroke="#a9d6ff" stroke-width="22" pointer-events="stroke"/><path d="${RL}" fill="none" stroke="#a9d6ff" stroke-width="22" pointer-events="stroke"/>`)}
+ ${P('lungs',`<path d="${LL}" fill="url(#lg)" stroke="#e8708c" stroke-width="2"/><path d="${RL}" fill="url(#lg)" stroke="#e8708c" stroke-width="2"/>
+   <path d="M84 372 Q130 362 184 342 M92 420 Q140 408 186 404 M336 386 Q290 370 236 352" stroke="#d65f7c" stroke-width="2" fill="none" opacity=".6" pointer-events="none"/>`)}
+ ${P('bronchi',`<path d="M210 266 C204 282 196 292 182 304 M210 266 C216 282 224 292 238 304" stroke="#e08a76" stroke-width="18" fill="none" stroke-linecap="round"/><path d="M210 266 C204 282 196 292 182 304 M210 266 C216 282 224 292 238 304" stroke="#ffc2b3" stroke-width="12" fill="none" stroke-linecap="round"/>`)}
+ ${P('bronchioles',`<path d="${BR}" stroke="transparent" stroke-width="14" fill="none"/><path d="${BR}" stroke="#b83a58" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+   <g transform="translate(420,0) scale(-1,1)"><path d="${BR}" stroke="transparent" stroke-width="14" fill="none"/><path d="${BR}" stroke="#b83a58" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>`)}
+ ${P('alveoli',`<g fill="#ffe0e8" stroke="#b83a58" stroke-width="1.5">${ALV}<g transform="translate(420,0) scale(-1,1)">${ALV}</g></g>
+   <path d="M312 398 L360 232" stroke="#b83a58" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
+   <circle cx="368" cy="190" r="42" fill="#fff" stroke="#f7839e" stroke-width="3"/>
+   <path d="M330 206 Q350 186 368 206 T406 206" stroke="#e5485f" stroke-width="4" fill="none" opacity=".7"/>
+   <g fill="#ffd0dc" stroke="#d65f7c" stroke-width="1.5"><circle cx="356" cy="178" r="11"/><circle cx="378" cy="176" r="11"/><circle cx="367" cy="196" r="11"/><circle cx="348" cy="198" r="9"/><circle cx="388" cy="196" r="9"/></g>
+   <path d="M367 150 v16" stroke="#b83a58" stroke-width="4"/><text x="368" y="244" text-anchor="middle" font-size="11" fill="#b83a58" font-family="Fredoka,sans-serif">🔍 zoom</text>`)}
+ ${P('diaphragm',`<path d="M46 476 Q210 416 374 476 L374 492 Q210 432 46 492Z" fill="#d39274" stroke="#a8674c" stroke-width="2"/>`)}
+ </svg>`;
+}
+function L1(){
+ const FIND=shuffle(FINDS).slice(0,6);
+ const st={phase:0, step:0, mistakes:0, streak:0, info:null, found:new Set(), wrong:null, justB:false};
+ const target=()=>st.phase===0?PATH[st.step]:FIND[st.step].id;
+ function tap(id){
+  if(st.phase===2) return;
+  if(id===target()){
+   sfx.ok(); st.found.add(id); st.info={id,ok:true}; st.streak=0; st.step++; st.justB=false;
+   const total=st.phase===0?PATH.length:FIND.length;
+   if(st.step>=total){
+    if(st.phase===0){ st.phase=1; st.step=0; st.found=new Set(); st.justB=true }
+    else { st.phase=2; draw(); setTimeout(()=>finish(0, calcStars(st.mistakes,[2,5]), Math.max(10,130-st.mistakes*5)),1200); return }
+   }
+  } else { sfx.bad(); st.mistakes++; st.streak++; st.info={id,ok:false}; st.wrong=id }
+  draw();
+ }
+ function draw(){
+  A={tap};
+  const tg=st.phase<2?target():null;
+  let task;
+  if(st.phase===0) task=`<b>${t('step')} ${st.step+1}/${PATH.length}</b> — ${tx(st.step===0?UI.airFirst:UI.airNext)}`;
+  else if(st.phase===1) task=(st.justB?t('phaseB')+'<br><br>':'')+`<b>${t('clue')} ${st.step+1}/${FIND.length}</b> — ${tx(FIND[st.step].c)}`;
+  else task=t('allFound');
+  const info=st.info?`<div class="info ${st.info.ok?'good':'bad'}"><h4>${st.info.ok?'✔':'✘ '+t('youTapped')+':'} ${tx(PARTS[st.info.id].n)}</h4><p>${tx(PARTS[st.info.id].f)}</p></div>`:`<p class="hint">${t('tapHint')}</p>`;
+  app.innerHTML=`${head(0,`${t('mistakes')}: ${st.mistakes}`)}
+   <div class="two"><div class="svgbox">${anatomySVG()}</div>
+   <div class="side"><div class="panel">${guide(task, st.info&&!st.info.ok?'sad':'happy')}${info}
+    <div class="chips">${(st.phase===0?PATH:FIND.map(f=>f.id)).map((p,i)=>`<span class="chip ${(i<st.step||st.phase===2)?'on':''}">${(i<st.step||st.phase===2)?tx(PARTS[p].n):'?'}</span>`).join(st.phase===0?'<span class="arr">→</span>':'')}</div>
+   </div></div></div>`;
+  document.querySelectorAll('.part').forEach(g=>{ const id=g.dataset.id;
+   if(st.found.has(id)) g.classList.add('found');
+   if(st.streak>=2&&id===tg) g.classList.add('hint');
+   g.addEventListener('click',()=>A.tap(id)) });
+  if(st.wrong){ const g=document.querySelector(`.part[data-id="${st.wrong}"]`); st.wrong=null; if(g){ g.classList.add('wrong'); setTimeout(()=>g.classList.remove('wrong'),700) } }
+ }
+ show({draw});
+}
+
+/* =========================================================
+   LEVEL 2 – Physiology: The Breathing Machine
+   ========================================================= */
+function modelSVG(inh){
+ let rl='',rr='';
+ [112,142,172,202].forEach(y=>{ rl+=`<path d="M176 ${y} C120 ${y-12} 72 ${y+4} 62 ${y+32}" stroke="#bfae9c" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85"/>`;
+  rr+=`<path d="M184 ${y} C240 ${y-12} 288 ${y+4} 298 ${y+32}" stroke="#bfae9c" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85"/>` });
+ return `<svg viewBox="0 0 360 320" class="model ${inh?'inhale':''}" id="model">
+  <rect x="34" y="40" width="292" height="272" rx="64" fill="#fff3ec" stroke="#f3d6c8" stroke-width="2"/>
+  <rect x="168" y="4" width="24" height="76" rx="6" fill="#ffd0c4" stroke="#e2a594" stroke-width="2"/>
+  <g id="mLungs"><path d="M168 100 C110 88 70 150 72 232 C74 262 122 262 170 250 Z" fill="#ff9fb2" stroke="#e8708c" stroke-width="2"/>
+   <path d="M192 100 C250 88 290 150 288 232 C286 262 238 262 190 250 Z" fill="#ff9fb2" stroke="#e8708c" stroke-width="2"/></g>
+  <path d="M180 78 L150 104 M180 78 L210 104" stroke="#e08a76" stroke-width="9" stroke-linecap="round"/>
+  <rect x="176" y="100" width="8" height="130" rx="4" fill="#bfae9c"/>
+  <g id="ribsL">${rl}</g><g id="ribsR">${rr}</g>
+  <g id="mDia"><path d="M44 272 Q180 206 316 272 L316 286 Q180 220 44 286Z" fill="#d39274" stroke="#a8674c" stroke-width="2"/></g>
+  <g id="airIn"><path d="M140 10 L140 52 M130 40 L140 54 L150 40" stroke="#2b7de9" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M220 10 L220 52 M210 40 L220 54 L230 40" stroke="#2b7de9" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+  <g id="airOut"><path d="M140 54 L140 12 M130 24 L140 10 L150 24" stroke="#8a94a6" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M220 54 L220 12 M210 24 L220 10 L230 24" stroke="#8a94a6" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+ </svg>`;
+}
+function L2(){
+ const st={stage:'model', inhale:false, tried:[false,false], auto:null, sortMist:0, sortOK:0};
+ let sorter, quiz;
+ const scr={draw(){ st.stage==='model'?drawModel():st.stage==='sort'?sorter.draw():quiz.draw() }, cleanup(){ clearInterval(st.auto); quiz&&quiz.cleanup() }};
+ function side(){
+  const lines=st.inhale?MODEL_IN:MODEL_OUT;
+  return `<div class="state"><h3>${st.inhale?'⬇ '+t('inhale')+' · '+t('airInLbl'):'⬆ '+t('exhale')+' · '+t('airOutLbl')}</h3>
+   <ul>${lines.map(l=>`<li>${tx(l)}</li>`).join('')}</ul>
+   <div class="gauge">${t('lungP')}<div class="gbar"><i style="width:${st.inhale?38:62}%"></i><em></em></div><small>${t('atmLine')}</small></div></div>`;
+ }
+ function breathe(inh){ st.inhale=inh; st.tried[inh?0:1]=true; sfx.pop();
+  const m=$('#model'); m&&m.classList.toggle('inhale',inh);
+  const s=$('#mside'); if(s) s.innerHTML=side();
+  const n=$('#mnext'); if(n) n.disabled=!(st.tried[0]&&st.tried[1]); }
+ function auto(){ if(st.auto){ clearInterval(st.auto); st.auto=null } else { breathe(!st.inhale); st.auto=setInterval(()=>breathe(!st.inhale),2300) } const b=$('#autoBtn'); if(b) b.textContent=st.auto?t('stop'):t('auto') }
+ function toSort(){ clearInterval(st.auto); st.auto=null; st.stage='sort';
+  sorter=Sorter(MECH,[{label:UI.inhale,icon:'⬇️💨',cls:'in'},{label:UI.exhale,icon:'⬆️💨',cls:'out'}],{head:()=>head(1),prompt:()=>t('sortMech'),onDone(s){
+   st.sortMist=s.mistakes; st.sortOK=MECH.length-s.mistakes; st.stage='quiz';
+   quiz=Quiz(Q2,{head:()=>head(1),onDone(q){ finish(1, calcStars(st.sortMist+q.wrong,[1,4]), st.sortOK*10+q.correct*10) }}); quiz.start(); }});
+  sorter.draw(); }
+ function drawModel(){
+  A={breathe,auto,toSort};
+  app.innerHTML=`${head(1)}<div class="two"><div class="svgbox">${modelSVG(st.inhale)}</div>
+   <div class="panel">${guide(t('modelIntro'))}
+    <div class="row" style="justify-content:flex-start"><button class="btn" onclick="A.breathe(true)">${t('breatheIn')}</button><button class="btn pink" onclick="A.breathe(false)">${t('breatheOut')}</button><button class="btn ghost" id="autoBtn" onclick="A.auto()">${st.auto?t('stop'):t('auto')}</button></div>
+    <div id="mside" style="margin-top:14px">${side()}</div>
+    <div class="row end"><button class="btn green" id="mnext" onclick="A.toSort()" ${st.tried[0]&&st.tried[1]?'':'disabled'}>${t('toSort')}</button></div>
+   </div></div>`;
+ }
+ show(scr);
+}
+
+/* =========================================================
+   LEVEL 3 – Gas Exchange Rush (arcade)
+   ========================================================= */
+function L3(){
+ const DUR=40;
+ const st={stage:'intro', score:0, combo:0, maxCombo:0, left:DUR, o2:0, co2:0, co:0, tick:null, spawn:null, toastT:null};
+ function stop(){ clearInterval(st.tick); clearTimeout(st.spawn); clearTimeout(st.toastT) }
+ const mult=()=>Math.min(3,1+Math.floor(st.combo/5));
+ function hud(){ const a=$('#hT'),b=$('#hS'),c=$('#hC'); if(a){a.textContent=st.left;b.textContent=st.score;c.textContent=mult()} }
+ function floatPt(m,txt,neg){ const ar=$('#arena'); if(!ar) return; const f=document.createElement('div'); f.className='floatpt'+(neg?' neg':''); f.textContent=txt; f.style.left=m.style.left; f.style.top=m.style.top; ar.appendChild(f); setTimeout(()=>f.remove(),800) }
+ function toast(msg){ const e=$('#toast'); if(!e) return; e.innerHTML=msg; e.classList.add('on'); clearTimeout(st.toastT); st.toastT=setTimeout(()=>e.classList.remove('on'),1600) }
+ function hit(m,type){
+  if(m._hit) return; m._hit=true; clearTimeout(m._t);
+  if(type==='co'){ st.co++; st.combo=0; st.score=Math.max(0,st.score-15); sfx.bad(); m.classList.add('bad'); floatPt(m,'−15',true); toast(t('coWarn')); const ar=$('#arena'); ar.classList.remove('flash'); void ar.offsetWidth; ar.classList.add('flash') }
+  else { st.combo++; st.maxCombo=Math.max(st.maxCombo,st.combo); const p=10*mult(); st.score+=p; type==='o2'?st.o2++:st.co2++; sfx.pop(); floatPt(m,'+'+p); m.classList.add(type==='o2'?'down':'up') }
+  setTimeout(()=>m.remove(),700); hud();
+ }
+ function spawn(){
+  const ar=$('#arena'); if(!ar||st.stage!=='play') return;
+  const el=DUR-st.left, r=Math.random(), type=r<.45?'o2':r<.84?'co2':'co';
+  const m=document.createElement('div'); m.className='mol '+type; m.textContent=type==='o2'?'O₂':type==='co2'?'CO₂':'CO';
+  m.style.left=(3+Math.random()*80)+'%'; m.style.top=(type==='co2'? 58+Math.random()*26 : 5+Math.random()*28)+'%';
+  m.addEventListener('pointerdown',e=>{e.preventDefault(); hit(m,type)});
+  ar.appendChild(m);
+  m._t=setTimeout(()=>{ if(m._hit) return; m._hit=true; m.classList.add('fade'); if(type!=='co'){ st.combo=0; hud() } setTimeout(()=>m.remove(),500) }, 3000-Math.min(1100,el*28));
+  st.spawn=setTimeout(spawn, Math.max(360,820-el*12)*(.7+Math.random()*.6));
+ }
+ function start(){ st.stage='play'; Object.assign(st,{score:0,combo:0,maxCombo:0,left:DUR,o2:0,co2:0,co:0}); draw(); spawn();
+  st.tick=setInterval(()=>{ st.left--; hud(); if(st.left<=0){ stop(); st.stage='result'; sfx.win(); draw() } },1000) }
+ function cont(){ finish(2, st.score>=320?3:st.score>=180?2:1, st.score) }
+ function draw(){
+  A={start,cont};
+  if(st.stage==='play'&&$('#arena')){ applyT(); return }
+  if(st.stage==='intro'){
+   app.innerHTML=`${head(2)}<div class="panel">${guide(t('gxIntro'))}
+    <div class="legend"><div><span class="mol o2 static">O₂</span>${t('lgO2')}</div><div><span class="mol co2 static">CO₂</span>${t('lgCO2')}</div><div><span class="mol co static">CO</span>${t('lgCO')}</div></div>
+    <div class="row end"><button class="btn big green" onclick="A.start()">▶ ${t('start')}</button></div></div>`;
+  } else if(st.stage==='play'){
+   app.innerHTML=`${head(2)}<div class="hud"><span>⏱ <b id="hT">${st.left}</b></span><span>⭐ <b id="hS">${st.score}</b></span><span>🔥 ×<b id="hC">${mult()}</b></span></div>
+    <div class="arena" id="arena"><div class="zone air"><span class="zlabel" data-t="zAir"></span></div><div class="wallm"></div>
+    <div class="zone blood"><span class="zlabel" data-t="zBlood"></span>${[0,1,2,3,4,5,6].map(i=>`<div class="rbc" style="animation-delay:${-i*1.3}s;top:${[18,48,30,62,22,52,38][i]}%"></div>`).join('')}</div>
+    <div id="toast" class="toast"></div></div><p class="tip" data-t="gxTip"></p>`;
+   applyT();
+  } else {
+   const s=st.score>=320?3:st.score>=180?2:1;
+   app.innerHTML=`${head(2)}<div class="panel">${guide(t('gxDone'))}
+    <div class="center bigstars">${starsHTML(s)}</div>
+    <div class="stats"><div class="stat"><b>${st.score}</b>${t('points')}</div><div class="stat"><b>${st.o2}</b>${t('stO2')}</div><div class="stat"><b>${st.co2}</b>${t('stCO2')}</div><div class="stat"><b>${st.co}</b>${t('stCO')}</div><div class="stat"><b>${st.maxCombo}</b>${t('stCombo')}</div></div>
+    <div class="explain">${t('gxExplain')}</div>
+    <div class="row"><button class="btn ghost" onclick="A.start()">🔁 ${t('retry')}</button><button class="btn" onclick="A.cont()">${t('continue')} ➜</button></div></div>`;
+  }
+ }
+ show({draw, cleanup:stop});
+}
+
+/* =========================================================
+   LEVEL 4 – Metabolism: The Energy Lab
+   ========================================================= */
+function L4(){
+ const R=['glu','o2'], P=['co2','h2o','atp'];
+ const st={stage:'eq', slots:[null,null,null,null,null], mist:0, fb:null, toks:shuffle(Object.keys(TOKENS))};
+ let quiz;
+ const cur=()=>st.slots.indexOf(null);
+ const tok=k=>`<b>${TOKENS[k].f}</b><small>${tx(TOKENS[k].n)}</small>`;
+ function tap(k){
+  const c=cur(); if(c<0||st.slots.includes(k)) return;
+  const side=c<2?R:P;
+  if(side.includes(k)){ st.slots[c]=k; sfx.ok(); st.fb=cur()<0?{done:true}:{ok:true,k} }
+  else { st.mist++; sfx.bad(); st.fb={ok:false,k,c} }
+  draw();
+  if(st.fb&&st.fb.ok===false){ const e=document.querySelector(`.token[data-k="${k}"]`); e&&e.classList.add('shake') }
+ }
+ function toQuiz(){ st.stage='quiz'; quiz=Quiz(Q4,{head:()=>head(3),onDone(q){ finish(3, calcStars(st.mist+q.wrong,[1,3]), Math.max(0,50-st.mist*5)+q.correct*10) }}); quiz.start() }
+ function fbHTML(){
+  const f=st.fb; if(!f) return '';
+  if(f.done) return `<div class="fb good">${t('eqDone')}</div><div class="row end"><button class="btn green" onclick="A.toQuiz()">${t('toQuiz')}</button></div>`;
+  if(f.ok) return `<div class="fb good">✔ <b>${TOKENS[f.k].f}</b> (${tx(TOKENS[f.k].n)}) — ${rand(t('yay'))}</div>`;
+  const why=TOKENS[f.k].why?tx(TOKENS[f.k].why):(P.includes(f.k)&&f.c<2?t('isProduct'):t('isReactant'));
+  return `<div class="fb bad">✘ <b>${TOKENS[f.k].f}</b> — ${why}</div>`;
+ }
+ function draw(){
+  if(st.stage==='quiz') return quiz.draw();
+  A={tap,toQuiz};
+  const c=cur(), slot=i=>`<div class="slot ${st.slots[i]?'filled':''} ${i===c?'cur':''}">${st.slots[i]?tok(st.slots[i]):'?'}</div>`;
+  app.innerHTML=`${head(3,`${t('mistakes')}: ${st.mist}`)}<div class="panel">${guide(t('eqIntro'), st.fb&&st.fb.ok===false?'sad':'happy')}
+   <div class="eq">${slot(0)}<span>+</span>${slot(1)}<span style="color:var(--pink)">⟶</span>${slot(2)}<span>+</span>${slot(3)}<span>+</span>${slot(4)}</div>
+   <div class="eqlab"><span>${t('reactants')}</span><span>${t('products')}</span></div>
+   <div class="tokens">${st.toks.map(k=>`<button class="token" data-k="${k}" onclick="A.tap('${k}')" ${st.slots.includes(k)||c<0?'disabled':''}>${tok(k)}</button>`).join('')}</div>
+   ${fbHTML()}</div>`;
+ }
+ show({draw, cleanup(){ quiz&&quiz.cleanup() }});
+}
+
+/* =========================================================
+   LEVEL 5 – Diseases: Lung Detective
+   ========================================================= */
+function L5(){
+ const cases=shuffle(CASES);
+ const st={stage:'case', i:0, picked:null, mist:0, correct:0,
+  opts:cases.map(c=>shuffle([c.d,...shuffle(Object.keys(DIS).filter(k=>k!==c.d)).slice(0,3)]))};
+ let sorter;
+ function pick(k){ if(st.picked) return; st.picked=k; const ok=k===cases[st.i].d; ok?(sfx.ok(),st.correct++):(sfx.bad(),st.mist++); draw() }
+ function next(){ st.i++; st.picked=null;
+  if(st.i>=cases.length){ st.stage='sort';
+   sorter=Sorter(HEALTH,[{label:UI.helps,icon:'💚',cls:'good'},{label:UI.harms,icon:'💔',cls:'bad'}],{head:()=>head(4),prompt:()=>t('healthIntro'),onDone(s){
+    finish(4, calcStars(st.mist+s.mistakes,[1,3]), st.correct*10+(HEALTH.length-s.mistakes)*10) }});
+  }
+  draw() }
+ function draw(){
+  if(st.stage==='sort') return sorter.draw();
+  A={pick,next};
+  const c=cases[st.i], done=!!st.picked, ok=st.picked===c.d;
+  app.innerHTML=`${head(4,`${t('mistakes')}: ${st.mist}`)}<div class="panel">
+   ${st.i===0&&!done?guide(t('detIntro')):''}
+   <div class="qtop"><span>🩺 ${t('patient')} ${st.i+1}/${cases.length}</span></div>
+   <div class="bar"><i style="width:${(st.i+(done?1:0))/cases.length*100}%"></i></div>
+   <div class="patient"><div class="pav">${c.av}</div><div><h3>${c.nm}</h3><p>${tx(c.s)}</p></div></div>
+   <h3 class="q">${t('diagnose')}</h3>
+   <div class="opts">${st.opts[st.i].map(k=>`<button class="opt ${done?(k===c.d?'right':(k===st.picked?'wrong':'dim')):''}" ${done?'disabled':''} onclick="A.pick('${k}')">${tx(DIS[k].n)}</button>`).join('')}</div>
+   ${done?`<div class="fb ${ok?'good':'bad'}"><b>${ok?rand(t('yay')):t('nope')}</b><br>${tx(DIS[c.d].i)}</div><div class="row end"><button class="btn" onclick="A.next()">${t('nextQ')} ➜</button></div>`:''}
+  </div>`;
+ }
+ show({draw});
+}
+
+/* =========================================================
+   LEVEL 6 – Final Challenge
+   ========================================================= */
+function L6(){
+ let quiz=null;
+ function go(){ quiz=Quiz(shuffle(POOL).slice(0,12),{timer:20,hearts:3,head:()=>head(5),onDone(q){ finish(5, q.correct>=11?3:q.correct>=8?2:1, q.pts) }}); scr.draw=quiz.draw; scr.cleanup=quiz.cleanup; quiz.start() }
+ const scr={draw(){ A={go}; app.innerHTML=`${head(5)}<div class="panel">${guide(t('finalIntro'))}<div class="row end"><button class="btn big green" onclick="A.go()">▶ ${t('start')}</button></div></div>` }, cleanup(){}};
+ show(scr);
+}
+
+/* ---------- Certificate ---------- */
+function certificate(){
+ show({draw(){
+  A={make(){ const v=$('#cname').value.trim(); if(!v) return; save.name=v.slice(0,40); persist(); sfx.win(); confetti(); this_draw() }, edit(){ save.name=''; persist(); this_draw() }};
+  const stars=Object.values(save.stars).reduce((a,b)=>a+b,0), pts=Object.values(save.best).reduce((a,b)=>a+b,0);
+  const date=new Date().toLocaleDateString(lang==='id'?'id-ID':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  if(!save.name){
+   app.innerHTML=`<div class="panel center">${guide(t('enterName'))}<input class="name" id="cname" maxlength="40" placeholder="…"><div class="row"><button class="btn pink" onclick="A.make()">🎓 ${t('make')}</button><button class="btn ghost" onclick="home()">🏠 ${t('menu')}</button></div></div>`;
+   const i=$('#cname'); i.focus(); i.addEventListener('keydown',e=>{ if(e.key==='Enter') A.make() });
+  } else {
+   app.innerHTML=`<div class="cert"><div style="font-size:3rem">🫁🏅</div><h1>${t('certTitle')}</h1><p>${t('certGiven')}</p>
+    <div class="cname">${esc(save.name)}</div><p style="line-height:1.5">${t('certFor')}</p>
+    <div style="font-size:1.4rem;font-weight:700;color:var(--navy)">⭐ ${stars}/18 · ${pts} ${t('pts')}</div>
+    <div style="display:flex;justify-content:center;margin-top:8px">${bubbleSVG('happy',90)}</div>
+    <p style="margin:0;color:var(--muted)">${t('signed')}<br>${date}</p></div>
+    <div class="row"><button class="btn" onclick="window.print()">${t('print')}</button><button class="btn ghost" onclick="A.edit()">${t('changeName')}</button><button class="btn ghost" onclick="home()">🏠 ${t('menu')}</button></div>`;
+  }
+ }});
+ function this_draw(){ screen.draw() }
+}
+
+/* ---------- Boot ---------- */
+updateHeader();
+home();
+</script>
+</body>
+</html>
